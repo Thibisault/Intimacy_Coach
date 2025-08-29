@@ -19,7 +19,7 @@ export default function App(){
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/data.json', { cache: 'no-store' })
+        const res = await fetch(`${import.meta.env.BASE_URL}data.json`, { cache: 'no-store' })
         if(!res.ok) throw new Error('data.json introuvable')
         const json = await res.json()
         setData(json)

@@ -1,7 +1,7 @@
 {
   "name": "Intimacy Coach",
   "short_name": "Intimacy",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#0b0b0f",
   "theme_color": "#111522",
