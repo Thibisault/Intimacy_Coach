@@ -1,11 +1,12 @@
 {
   "name": "Intimacy Coach",
   "short_name": "Intimacy",
-  "start_url": ".",
+  "description": "Lecteur guidé CN→FR avec montée d’intensité et positions.",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0b0b0f",
-  "theme_color": "#111522",
-  "lang": "fr",
+  "background_color": "#111522",
+  "theme_color": "#7aa2ff",
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -16,12 +17,6 @@
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
-    {
-      "src": "/icons/apple-touch-icon-180.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any maskable"
     }
   ]
 }
