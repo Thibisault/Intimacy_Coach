@@ -8,19 +8,18 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
-      manifest: {
+  manifest: {
         name: 'Intimacy Coach',
         short_name: 'Intimacy',
-        description: 'Lecteur guidé CN→FR, sans doublons, avec filtres et bips.',
-        start_url: '/',
-        scope: '/',
-        display: 'standalone', // ou 'fullscreen'
+        start_url: '/Intimacy_Coach/',
+        scope: '/Intimacy_Coach/',
+        display: 'standalone',
         theme_color: '#111522',
         background_color: '#111522',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       }
     })
