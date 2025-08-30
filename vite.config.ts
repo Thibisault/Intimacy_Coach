@@ -11,14 +11,16 @@ export default defineConfig({
       manifest: {
         name: 'Intimacy Coach',
         short_name: 'Intimacy',
-        description: 'Lecteur guidé CN→FR avec montée d’intensité et positions.',
+        description: 'Lecteur guidé CN→FR, sans doublons, avec filtres et bips.',
         start_url: '/',
-        display: 'standalone',
+        scope: '/',
+        display: 'standalone', // ou 'fullscreen'
+        theme_color: '#111522',
         background_color: '#111522',
-        theme_color: '#7aa2ff',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       }
     })

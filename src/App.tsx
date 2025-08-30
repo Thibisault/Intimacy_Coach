@@ -3,7 +3,8 @@ import { t } from './i18n'
 import { Settings, defaultSettings, loadSettings, saveSettings, Step, Segment, DataFile } from './types'
 import PlayTab from './components/PlayTab'
 import CustomizeTab from './components/CustomizeTab'
-import InstallPWA from './components/InstallPWA'
+import { registerSW } from 'virtual:pwa-register'
+registerSW({ immediate: true })
 
 type Tab = 'play' | 'custom'
 
@@ -19,7 +20,7 @@ export default function App(){
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${import.meta.env.BASE_URL}data.json`, { cache: 'no-store' })
+        const res = await fetch('/data.json', { cache: 'no-store' })
         if(!res.ok) throw new Error('data.json introuvable')
         const json = await res.json()
         setData(json)
@@ -37,7 +38,7 @@ export default function App(){
   return (
     <div className="container">
       <header className="row" style={{alignItems:'center', marginBottom: 12}}>
-        <h1>Intimacy Coach</h1><InstallPWA />
+        <h1>Intimacy Coach</h1>
         <div className="row lang" style={{alignItems:'center'}}>
           <label>{tt.language}</label>
           <select value={lang} onChange={e => setSettings(s => ({...s, lang: e.target.value as any}))}>

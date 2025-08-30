@@ -46,39 +46,39 @@ export const t = (lang:Lang) => {
     emptyData: 'Collez votre data.json dans /public/data.json puis rechargez.'
   }
   const zh = {
-  ...fr,
-  segNames: {
-    L1: '觉醒',
-    L2: '升温',
-    L3: '炽热',
-    L4: '融合',
-    L5: '巅峰',
-    SEXE: '体位'
-  },
-  play: '开始',
-  customize: '自定义',
-  language: '语言',
-  start: '开始',
-  pause: '暂停',
-  resume: '继续',
-  stop: '停止',
-  planning: '规划中…',
-  announcing: '播报（中文→法语）…',
-  action: '执行',
-  cooldown: '休息',
-  currentSegment: '当前分段',
-  next: '下一条',
-  filters: '过滤（排除）',
-  participants: '参与者',
-  p1: 'P1 名称',
-  p2: 'P2 名称',
-  ranges: '每段时长（秒）',
-  cooldownSec: '休息（秒）',
-  sequence: '顺序',
-  addStep: '添加步骤',
-  remove: '删除',
-  testVoice: '测试语音',
-  emptyData: '请将 data.json 粘贴到 /public/data.json 并刷新页面。'
-}
-    return lang==='zh' ? zh : fr
+      segNames: {
+        L1: '觉醒',
+        L2: '升温',
+        L3: '炽热',
+        L4: '融合',
+        L5: '巅峰',
+        SEXE: '体位'
+      },
+    ...fr,
+    play: '开始',
+    customize: '自定义',
+    language: '语言',
+    start: '开始',
+    pause: '暂停',
+    resume: '继续',
+    stop: '停止',
+    planning: '规划中…',
+    announcing: '播报（中文→法语）…',
+    action: '执行',
+    cooldown: '休息',
+    currentSegment: '当前分段',
+    next: '下一条',
+    filters: '过滤（排除）',
+    participants: '参与者',
+    p1: 'P1 名称',
+    p2: 'P2 名称',
+    ranges: '每段时长（秒）',
+    cooldownSec: '休息（秒）',
+    sequence: '顺序',
+    addStep: '添加步骤',
+    remove: '删除',
+    testVoice: '测试语音',
+    emptyData: '请将 data.json 粘贴到 /public/data.json 并刷新页面。'
+  }
+  return lang==='zh' ? zh : fr
 }

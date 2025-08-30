@@ -1,18 +1,27 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App'
-import { registerSW } from 'virtual:pwa-register'
-import './styles.css'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
 
-const root = createRoot(document.getElementById('root')!)
-root.render(<App />)
-
-// Register PWA service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(new URL('sw.js', import.meta.url)).catch(()=>{})
-  })
-}
-
-
-const updateSW = registerSW({ immediate: true })
+export default defineConfig({
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg'],
+      manifest: {
+        name: 'Intimacy Coach',
+        short_name: 'Intimacy',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        theme_color: '#111522',
+        background_color: '#111522',
+        icons: [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        ]
+      }
+    })
+  ],
+})
