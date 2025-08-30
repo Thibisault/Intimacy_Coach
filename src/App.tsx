@@ -3,8 +3,7 @@ import { t } from './i18n'
 import { Settings, defaultSettings, loadSettings, saveSettings, Step, Segment, DataFile } from './types'
 import PlayTab from './components/PlayTab'
 import CustomizeTab from './components/CustomizeTab'
-import { registerSW } from 'virtual:pwa-register'
-registerSW({ immediate: true })
+
 
 type Tab = 'play' | 'custom'
 
