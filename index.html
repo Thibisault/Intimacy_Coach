@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <title>Intimacy Coach</title>
+    <meta name="description" content="Séquences érotiques guidées FR + CN avec voix et compte à rebours." />
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./favicon.ico">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>Intimacy Coach</h1>
+        <div class="lang-toggle">
+          <button id="btn-fr" class="chip active">FR</button>
+          <button id="btn-zh" class="chip">中文</button>
+        </div>
+      </header>
+
+      <main>
+        <nav class="tabs">
+          <button class="tab active" data-tab="play">▶️ <span data-i18n="tab_play">Jouer</span></button>
+          <button class="tab" data-tab="settings">⚙️ <span data-i18n="tab_settings">Personnaliser</span></button>
+          <button class="tab" data-tab="draw">🎲 <span data-i18n="tab_draw">Tirage simple</span></button>
+        </nav>
+
+        <!-- PLAY -->
+        <section id="tab-play" class="tabpanel active">
+          <div class="status">
+            <div class="badges"><span id="badge-segment" class="badge strong">—</span></div>
+          </div>
+          <div id="action-card" class="card theme-level1">
+            <div class="action-text zh" id="text-zh">—</div>
+            <div class="action-text fr" id="text-fr">—</div>
+            <div class="timer">
+              <div id="progress" class="progress"><div id="progress-bar"></div></div>
+              <div class="time-row">
+                <span id="time-left">00:00</span>
+                <span id="time-total">00:00</span>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button id="btn-start" class="primary" data-i18n="start">Démarrer</button>
+            <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
+            <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
+          </div>
+          <div class="hint-row">
+            <label class="switch"><input type="checkbox" id="keep-awake"><span class="slider"></span></label>
+            <span class="hint" data-i18n="keep_awake">Garder l’écran allumé pendant la session</span>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="tab-settings" class="tabpanel">
+          <div class="grid two">
+            <!-- Participants -->
+            <div class="card">
+              <details class="accordion">
+                <summary>👥 <span data-i18n="participants">Participants</span></summary>
+                <div class="field"><label>👨 <span data-i18n="man_name">Nom homme</span></label><input id="inp-p1" placeholder="Homme"></div>
+                <div class="field"><label>👩 <span data-i18n="woman_name">Nom femme</span></label><input id="inp-p2" placeholder="Femme"></div>
+              </details>
+            </div>
+
+            <!-- Cycle acteurs -->
+            <div class="card">
+              <details class="accordion">
+                <summary>🔁 <span data-i18n="actor_cycle">Cycle acteurs</span></summary>
+                <div id="actor-mode-buttons" class="mode-buttons"></div>
+              </details>
+            </div>
+
+            <!-- Voix -->
+            <div class="card">
+              <details class="accordion">
+                <summary>🔊 <span data-i18n="voices_title">Voix</span></summary>
+                <div class="field"><label>Voix FR</label><select id="sel-voice-fr"></select></div>
+                <div class="field"><label>Voix 中文</label><select id="sel-voice-zh"></select></div>
+                <button id="btn-test-voices" class="secondary" data-i18n="test_voices">Tester les voix</button>
+                <small style="color:#9ca3af">Conseil: installe une voix FR (France) et une voix 中文 sur ton téléphone pour un accent parfait.</small>
+              </details>
+            </div>
+
+            <!-- Filtres -->
+            <div class="card">
+              <details class="accordion">
+                <summary>🪄 <span data-i18n="filters_title">Exclusions par défaut</span></summary>
+                <div class="field checkbox"><label><input type="checkbox" id="def-anal"> <span data-i18n="filter_anal">Exclure anal</span></label></div>
+                <div class="field checkbox"><label><input type="checkbox" id="def-hard"> <span data-i18n="filter_hard">Exclure hard</span></label></div>
+                <div class="field checkbox"><label><input type="checkbox" id="def-clothed"> <span data-i18n="filter_clothed">Exclure clothed</span></label></div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Séquence (fermée par défaut) -->
+          <div class="card">
+            <details class="accordion">
+              <summary>🧩 <span data-i18n="sequence">Séquence</span></summary>
+
+              <div id="sequence-list" class="sequence-list" style="margin-top:8px"></div>
+
+              <!-- Ajout d'une intensité via chips (plus de select) -->
+              <div class="row add-controls" style="margin-top:8px">
+                <div id="add-seg-chips" class="chip-row"></div>
+                <div class="field inline">
+                  <label data-i18n="minutes_label">Minutes</label>
+                  <div class="input-affix">
+                    <input id="inp-add-min" type="number" min="1" value="3">
+                    <span class="affix" data-i18n="unit_min">min</span>
+                  </div>
+                </div>
+                <button id="btn-add-step" class="secondary" data-i18n="add_step">Ajouter</button>
+              </div>
+            </details>
+          </div>
+
+          <!-- Durées min/max -->
+          <div class="card">
+            <details class="accordion">
+              <summary>⏱️ <span data-i18n="durations">Durées min/max par segment (sec)</span></summary>
+              <div class="ranges-grid" style="margin-top:8px"></div>
+            </details>
+          </div>
+
+          <div class="card row">
+            <button id="btn-save" class="primary" data-i18n="save">Enregistrer</button>
+            <button id="btn-reset" class="danger" data-i18n="reset">Réinitialiser</button>
+            <button id="btn-export" class="secondary" data-i18n="export">Exporter</button>
+            <input type="file" id="file-import" accept="application/json" style="display:none" />
+            <button id="btn-import" class="secondary" data-i18n="import">Importer</button>
+          </div>
+        </section>
+
+        <!-- DRAW -->
+        <section id="tab-draw" class="tabpanel">
+          <div class="card">
+            <div id="draw-intensity-chips" class="chip-row"></div>
+            <div class="controls" style="margin-top:8px">
+              <button id="btn-draw-play" class="primary" data-i18n="play_btn">Jouer</button>
+            </div>
+          </div>
+          <div id="draw-card" class="card theme-level1" style="margin-top:12px;display:none">
+            <div class="action-text zh" id="draw-zh">—</div>
+            <div class="action-text fr" id="draw-fr">—</div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <small>© 2025 — <span>Intimacy Coach</span> • <span data-i18n="offline_ready">PWA hors-ligne</span></small>
+      </footer>
+    </div>
+
+    <script type="module" src="./js/i18n.js"></script>
+    <script type="module" src="./js/util.js"></script>
+    <script type="module" src="./js/storage.js"></script>
+    <script type="module" src="./js/audio.js"></script>
+    <script type="module" src="./js/tts.js"></script>
+    <script type="module" src="./js/wake-lock.js"></script>
+    <script type="module" src="./js/planner.js"></script>
+    <script type="module" src="./js/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(()=>{});
+        });
+      }
+    </script>
+  </body>
+</html>
