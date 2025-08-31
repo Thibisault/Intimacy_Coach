@@ -158,21 +158,20 @@
       </footer>
     </div>
 
-<!-- scripts (replace entire block) -->
-<script type="module" src="./audio.js?v=2025-08-31"></script>
-<script type="module" src="./tts.js?v=2025-08-31"></script>
-<script type="module" src="./wake-lock.js?v=2025-08-31"></script>
-<script type="module" src="./planner.js?v=2025-08-31"></script>
-<script type="module" src="./app.js?v=2025-08-31"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js?v=2025-08-31');
-      // Quand le nouveau SW prend la main, on recharge pour éviter un mix ancien/nouveau
-      navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
-    });
-  }
-</script>
-
+    <script type="module" src="./js/i18n.js"></script>
+    <script type="module" src="./js/util.js"></script>
+    <script type="module" src="./js/storage.js"></script>
+    <script type="module" src="./js/audio.js"></script>
+    <script type="module" src="./js/tts.js"></script>
+    <script type="module" src="./js/wake-lock.js"></script>
+    <script type="module" src="./js/planner.js"></script>
+    <script type="module" src="./js/app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(()=>{});
+        });
+      }
+    </script>
   </body>
 </html>
