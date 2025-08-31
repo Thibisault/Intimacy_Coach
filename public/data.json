@@ -1,0 +1,444 @@
+{
+  "preliminaires_levels": [
+    {
+      "niveau": 1,
+      "actions": [
+        {
+          "id": "p1_to_p2_level1",
+          "actor": "P1",
+          "target": "P2",
+          "templates": [
+            { "text": "{P1} embrasse doucement les lèvres de {P2}.", "text_zh": "{P1} 轻轻亲吻 {P2} 的嘴唇。" },
+            { "text": "{P1} dépose un baiser sur la joue de {P2}.", "text_zh": "{P1} 在 {P2} 的脸颊上落下一个吻。" },
+            { "text": "{P1} embrasse le front de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的额头。" },
+            { "text": "{P1} embrasse le cou de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的脖颈。" },
+            { "text": "{P1} embrasse la nuque de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的后颈。" },
+            { "text": "{P1} embrasse l’oreille de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的耳朵。" },
+            { "text": "{P1} caresse la nuque de {P2} du bout des doigts.", "text_zh": "{P1} 用指尖抚摸 {P2} 的后颈。" },
+            { "text": "{P1} effleure le dos de {P2} avec sa main.", "text_zh": "{P1} 用手掌轻轻掠过 {P2} 的背部。" },
+            { "text": "{P1} caresse les hanches de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的髋部。" },
+            { "text": "{P1} caresse les cheveux de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的头发。" },
+
+            { "text": "{P1} caresse l’extérieur des cuisses de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻抚 {P2} 的大腿外侧。", "tags": ["clothed"] },
+            { "text": "{P1} glisse sa main sur les hanches de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料把手滑过 {P2} 的髋部。", "tags": ["clothed"] },
+            { "text": "{P1} caresse le bas du dos de {P2} à travers son haut.", "text_zh": "{P1} 隔着上衣抚摸 {P2} 的下背。", "tags": ["clothed"] },
+            { "text": "{P1} effleure la taille de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 的腰际。", "tags": ["clothed"] }
+          ]
+        },
+        {
+          "id": "p2_to_p1_level1",
+          "actor": "P2",
+          "target": "P1",
+          "templates": [
+            { "text": "{P2} embrasse la bouche de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的嘴唇。" },
+            { "text": "{P2} embrasse la joue de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的脸颊。" },
+            { "text": "{P2} embrasse le cou de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的脖颈。" },
+            { "text": "{P2} embrasse la nuque de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的后颈。" },
+            { "text": "{P2} embrasse l’oreille de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的耳朵。" },
+            { "text": "{P2} caresse le torse de {P1}.", "text_zh": "{P2} 抚摸 {P1} 的胸口。" },
+            { "text": "{P2} caresse le ventre de {P1}.", "text_zh": "{P2} 抚摸 {P1} 的腹部。" },
+            { "text": "{P2} pose sa main sur les hanches de {P1}.", "text_zh": "{P2} 把手放在 {P1} 的髋部上。" },
+            { "text": "{P2} effleure la mâchoire de {P1} avec ses doigts.", "text_zh": "{P2} 用指尖轻触 {P1} 的下颌。" },
+            { "text": "{P2} glisse sa main le long du dos de {P1}.", "text_zh": "{P2} 将手沿着 {P1} 的背部缓缓滑下。" },
+
+            { "text": "{P2} caresse le torse de {P1} par-dessus son t-shirt.", "text_zh": "{P2} 隔着T恤抚摸 {P1} 的胸口。", "tags": ["clothed"] },
+            { "text": "{P2} caresse les cuisses de {P1} à travers son pantalon.", "text_zh": "{P2} 隔着裤子抚摸 {P1} 的大腿。", "tags": ["clothed"] },
+            { "text": "{P2} passe ses mains sur les hanches de {P1} au-dessus du tissu.", "text_zh": "{P2} 隔着布料抚过 {P1} 的髋部。", "tags": ["clothed"] },
+            { "text": "{P2} caresse le bas du dos de {P1} par-dessus ses vêtements.", "text_zh": "{P2} 隔着衣物抚摸 {P1} 的下背。", "tags": ["clothed"] }
+          ]
+        },
+        {
+          "id": "mutuelle_level1",
+          "actor": "both",
+          "target": "both",
+          "templates": [
+            { "text": "{P1} et {P2} s’embrassent longuement.", "text_zh": "{P1} 与 {P2} 长时间亲吻。" },
+            { "text": "{P1} et {P2} s’enlacent en se caressant le dos.", "text_zh": "{P1} 和 {P2} 相互拥抱并抚摸对方的背部。" },
+            { "text": "{P1} et {P2} se serrent l’un contre l’autre.", "text_zh": "{P1} 与 {P2} 紧贴相拥。" },
+            { "text": "{P1} et {P2} se tiennent par la nuque et s’embrassent.", "text_zh": "{P1} 和 {P2} 托住彼此的后颈亲吻。" },
+            { "text": "{P1} et {P2} collent leurs fronts quelques secondes.", "text_zh": "{P1} 与 {P2} 额头相抵片刻。" },
+            { "text": "{P1} et {P2} échangent des baisers courts et répétés.", "text_zh": "{P1} 与 {P2} 交换一连串短吻。" },
+            { "text": "{P1} et {P2} se caressent les bras en s’embrassant.", "text_zh": "{P1} 与 {P2} 亲吻时抚摸对方的手臂。" },
+            { "text": "{P1} et {P2} se tiennent la main et se rapprochent.", "text_zh": "{P1} 与 {P2} 牵着手靠近彼此。" },
+            { "text": "{P1} et {P2} se caressent la taille en s’embrassant.", "text_zh": "{P1} 与 {P2} 接吻时抚摸对方的腰部。" },
+            { "text": "{P1} et {P2} respirent l’un contre l’autre, lèvres proches.", "text_zh": "{P1} 与 {P2} 贴近呼吸，双唇相距很近。" },
+
+            { "text": "{P1} et {P2} se caressent les hanches par-dessus les vêtements en s’embrassant.", "text_zh": "{P1} 与 {P2} 接吻时隔着衣物抚摸对方的髋部。", "tags": ["clothed"] },
+            { "text": "{P1} et {P2} glissent leurs mains sur les cuisses de l’autre au-dessus du tissu.", "text_zh": "{P1} 与 {P2} 隔着布料抚过彼此的大腿。", "tags": ["clothed"] }
+          ]
+        }
+      ]
+    },
+    {
+      "niveau": 2,
+      "actions": [
+        {
+          "id": "p1_to_p2_level2",
+          "actor": "P1",
+          "target": "P2",
+          "templates": [
+            { "text": "{P1} embrasse la poitrine de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的胸部。" },
+            { "text": "{P1} suce doucement les mamelons de {P2}.", "text_zh": "{P1} 轻轻含吮 {P2} 的乳头。" },
+            { "text": "{P1} mordille légèrement les mamelons de {P2}.", "text_zh": "{P1} 轻轻咬啮 {P2} 的乳头。" },
+            { "text": "{P1} caresse les seins de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的乳房。" },
+            { "text": "{P1} embrasse le bas-ventre de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的下腹。" },
+            { "text": "{P1} caresse les fesses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的臀部。" },
+            { "text": "{P1} embrasse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的大腿内侧。" },
+            { "text": "{P1} caresse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的大腿内侧。" },
+            { "text": "{P1} embrasse la clavicule de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的锁骨。" },
+            { "text": "{P1} glisse sa main sur le bas du dos de {P2}.", "text_zh": "{P1} 将手滑过 {P2} 的下背。" },
+
+            { "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte, lentement.", "text_zh": "{P1} 隔着内裤缓慢抚摸 {P2} 的外阴。", "tags": ["clothed"] },
+            { "text": "{P1} frotte l’intérieur des cuisses de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料摩擦 {P2} 的大腿内侧。", "tags": ["clothed"] },
+            { "text": "{P1} effleure le contour de la vulve de {P2} à travers ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 外阴的轮廓。", "tags": ["clothed"] },
+            { "text": "{P1} presse légèrement sa paume entre les cuisses de {P2} par-dessus sa culotte.", "text_zh": "{P1} 隔着内裤把手掌轻轻按在 {P2} 的双腿之间。", "tags": ["clothed"] }
+          ]
+        },
+        {
+          "id": "p2_to_p1_level2",
+          "actor": "P2",
+          "target": "P1",
+          "templates": [
+            { "text": "{P2} embrasse le torse de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的胸口。" },
+            { "text": "{P2} lèche légèrement le téton de {P1}.", "text_zh": "{P2} 轻轻舔 {P1} 的乳头。" },
+            { "text": "{P2} mordille doucement le cou de {P1}.", "text_zh": "{P2} 轻轻咬啮 {P1} 的颈侧。" },
+            { "text": "{P2} caresse le ventre de {P1}.", "text_zh": "{P2} 抚摸 {P1} 的腹部。" },
+            { "text": "{P2} caresse les cuisses de {P1}.", "text_zh": "{P2} 抚摸 {P1} 的大腿。" },
+            { "text": "{P2} glisse sa main sur les hanches de {P1}.", "text_zh": "{P2} 将手滑过 {P1} 的髋部。" },
+            { "text": "{P2} embrasse l’épaule de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的肩头。" },
+            { "text": "{P2} caresse le bas du dos de {P1}.", "text_zh": "{P2} 抚摸 {P1} 的下背。" },
+            { "text": "{P2} pince doucement les tétons de {P1}.", "text_zh": "{P2} 轻轻捏 {P1} 的乳头。" },
+            { "text": "{P2} embrasse la ligne du torse de {P1}.", "text_zh": "{P2} 沿着 {P1} 的胸口线条亲吻。" },
+
+            { "text": "{P2} caresse le pénis de {P1} au-dessus de son boxer, lentement.", "text_zh": "{P2} 隔着内裤缓慢抚摸 {P1} 的阴茎。", "tags": ["clothed"] },
+            { "text": "{P2} presse la paume sur l’entrejambe de {P1} à travers le tissu.", "text_zh": "{P2} 隔着布料把手掌按在 {P1} 的裤裆上。", "tags": ["clothed"] },
+            { "text": "{P2} frotte la base du pénis de {P1} par-dessus son pantalon.", "text_zh": "{P2} 隔着裤子摩擦 {P1} 阴茎的根部。", "tags": ["clothed"] },
+            { "text": "{P2} encercle l’entrejambe de {P1} avec sa main au-dessus des vêtements.", "text_zh": "{P2} 隔着衣物用手包覆 {P1} 的裤裆。", "tags": ["clothed"] }
+          ]
+        },
+        {
+          "id": "mutuelle_level2",
+          "actor": "both",
+          "target": "both",
+          "templates": [
+            { "text": "{P1} et {P2} s’embrassent tout en caressant le torse de l’autre.", "text_zh": "{P1} 与 {P2} 亲吻的同时抚摸彼此的胸口。" },
+            { "text": "{P1} et {P2} pressent leurs corps l’un contre l’autre.", "text_zh": "{P1} 与 {P2} 身体相贴。" },
+            { "text": "{P1} embrasse le cou de {P2} pendant qu’elle embrasse son torse.", "text_zh": "{P1} 亲吻 {P2} 的颈侧，同时她亲吻他的胸口。" },
+            { "text": "{P1} et {P2} se caressent les hanches en s’embrassant.", "text_zh": "{P1} 与 {P2} 接吻时抚摸彼此的髋部。" },
+            { "text": "{P1} et {P2} s’embrassent en caressant les fesses de l’autre.", "text_zh": "{P1} 与 {P2} 接吻时抚摸对方的臀部。" },
+            { "text": "{P1} et {P2} se mordillent le cou tour à tour.", "text_zh": "{P1} 与 {P2} 轮流轻咬对方的颈侧。" },
+            { "text": "{P1} et {P2} s’embrassent en se caressant les cuisses.", "text_zh": "{P1} 与 {P2} 接吻时抚摸彼此的大腿。" },
+            { "text": "{P1} et {P2} se passent les mains sur le dos et la taille.", "text_zh": "{P1} 与 {P2} 把手在彼此的背部和腰间游走。" },
+            { "text": "{P1} et {P2} alternent baisers sur le cou et sur le torse.", "text_zh": "{P1} 与 {P2} 交替亲吻颈侧与胸口。" },
+            { "text": "{P1} et {P2} se tiennent collés, mains sur les hanches.", "text_zh": "{P1} 与 {P2} 贴紧站立，双手放在对方髋部。" },
+
+            { "text": "{P1} et {P2} se frottent l’entrejambe l’un contre l’autre par-dessus les vêtements.", "text_zh": "{P1} 与 {P2} 隔着衣物互相摩擦裤裆。", "tags": ["clothed"] },
+            { "text": "{P1} et {P2} guident leurs mains mutuelles sur les cuisses au-dessus du tissu.", "text_zh": "{P1} 与 {P2} 隔着布料相互引导对方的手在大腿上滑动。", "tags": ["clothed"] }
+          ]
+        }
+      ]
+    },
+    {
+      "niveau": 3,
+      "actions": [
+        {
+          "id": "p1_to_p2_level3",
+          "actor": "P1",
+          "target": "P2",
+          "templates": [
+            { "text": "{P1} embrasse la vulve de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的外阴。" },
+            { "text": "{P1} embrasse l’entrée du vagin de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的阴道入口。" },
+
+            { "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte avant de glisser plus bas.", "text_zh": "{P1} 先隔着内裤抚摸 {P2} 的外阴，然后再向下探索。", "tags": ["clothed"] },
+            { "text": "{P1} frotte doucement le clitoris de {P2} à travers le tissu de sa culotte.", "text_zh": "{P1} 隔着内裤轻轻摩擦 {P2} 的阴蒂。", "tags": ["clothed"] },
+
+            { "text": "{P1} caresse la vulve de {P2} avec ses doigts.", "text_zh": "{P1} 用手指抚摸 {P2} 的外阴。" },
+            { "text": "{P1} frotte doucement le clitoris de {P2} avec un doigt.", "text_zh": "{P1} 用一根手指轻轻摩擦 {P2} 的阴蒂。" },
+            { "text": "{P1} écarte doucement les lèvres de {P2} avec ses doigts.", "text_zh": "{P1} 用手指轻轻分开 {P2} 的阴唇。" },
+            { "text": "{P1} glisse sa paume sur la vulve de {P2}.", "text_zh": "{P1} 用手掌在 {P2} 的外阴上缓缓滑过。" },
+            { "text": "{P1} tapote le clitoris de {P2} avec le bout du doigt.", "text_zh": "{P1} 用指尖轻点 {P2} 的阴蒂。" },
+            { "text": "{P1} embrasse l’intérieur des cuisses près de la vulve de {P2}.", "text_zh": "{P1} 在靠近外阴的大腿内侧亲吻 {P2}。" },
+            { "text": "{P1} frotte son gland sur le clitoris de {P2} sans pénétrer.", "text_zh": "{P1} 用龟头在 {P2} 的阴蒂上摩擦，不进入。" },
+            { "text": "{P1} frotte son pénis entre les lèvres de {P2} sans entrer.", "text_zh": "{P1} 将阴茎在 {P2} 的阴唇间摩擦，不进入。" }
+          ]
+        },
+        {
+          "id": "p2_to_p1_level3",
+          "actor": "P2",
+          "target": "P1",
+          "templates": [
+            { "text": "{P2} embrasse le pénis de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的阴茎。" },
+
+            { "text": "{P2} caresse le pénis de {P1} par-dessus son boxer avant de passer sous le tissu.", "text_zh": "{P2} 先隔着内裤抚摸 {P1} 的阴茎，然后伸入衣物内。", "tags": ["clothed"] },
+            { "text": "{P2} presse sa paume sur l’entrejambe de {P1} à travers le tissu, lentement.", "text_zh": "{P2} 隔着布料把手掌慢慢按在 {P1} 的裆部。", "tags": ["clothed"] },
+
+            { "text": "{P2} embrasse le gland de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的龟头。" },
+            { "text": "{P2} caresse le pénis de {P1} avec sa main.", "text_zh": "{P2} 用手抚摸 {P1} 的阴茎。" },
+            { "text": "{P2} branle lentement le pénis de {P1}.", "text_zh": "{P2} 缓慢用手套弄 {P1} 的阴茎。" },
+            { "text": "{P2} caresse les testicules de {P1} avec sa main.", "text_zh": "{P2} 用手抚摸 {P1} 的睾丸。" },
+            { "text": "{P2} embrasse les testicules de {P1}.", "text_zh": "{P2} 亲吻 {P1} 的睾丸。" },
+            { "text": "{P2} glisse sa main sur la base du pénis de {P1}.", "text_zh": "{P2} 将手滑过 {P1} 阴茎的根部。" },
+            { "text": "{P2} effleure le gland de {P1} avec le bout du doigt.", "text_zh": "{P2} 用指尖轻触 {P1} 的龟头。" },
+            { "text": "{P2} frotte doucement le pénis de {P1} contre sa cuisse.", "text_zh": "{P2} 将 {P1} 的阴茎轻轻在自己的大腿上摩擦。" },
+            { "text": "{P2} embrasse la base du pénis de {P1}.", "text_zh": "{P2} 亲吻 {P1} 阴茎的根部。" }
+          ]
+        },
+        {
+          "id": "mutuelle_level3",
+          "actor": "both",
+          "target": "both",
+          "templates": [
+            { "text": "{P1} frotte son gland contre la vulve de {P2} tandis qu’elle caresse son pénis.", "text_zh": "{P1} 用龟头在 {P2} 的外阴上摩擦，同时她抚摸他的阴茎。" },
+            { "text": "{P1} et {P2} se frottent mutuellement sexe contre sexe sans pénétrer.", "text_zh": "{P1} 与 {P2} 性器相贴互相摩擦，但不进入。" },
+            { "text": "{P1} embrasse la poitrine de {P2} pendant qu’elle caresse son sexe.", "text_zh": "{P1} 亲吻 {P2} 的胸部，同时她抚摸他的下体。" },
+            { "text": "{P1} caresse la vulve de {P2} pendant qu’elle branle son pénis.", "text_zh": "{P1} 抚摸 {P2} 的外阴，同时她用手套弄他的阴茎。" },
+            { "text": "{P1} et {P2} se caressent les cuisses et les sexes en même temps.", "text_zh": "{P1} 与 {P2} 同时抚摸彼此的大腿与性器。" },
+            { "text": "{P1} embrasse la vulve de {P2} pendant qu’elle embrasse son pénis.", "text_zh": "{P1} 亲吻 {P2} 的外阴，同时她亲吻他的阴茎。" },
+            { "text": "{P1} et {P2} se caressent allongés, bassins rapprochés.", "text_zh": "{P1} 与 {P2} 并躺相抚，骨盆相近。" },
+            { "text": "{P1} frotte la longueur de son pénis sur la vulve de {P2} pendant qu’elle le tient.", "text_zh": "{P1} 将阴茎整段在 {P2} 的外阴上摩擦，她用手握着他。" },
+            { "text": "{P1} et {P2} se caressent au-dessus des sous-vêtements.", "text_zh": "{P1} 与 {P2} 隔着内衣相互抚摸。", "tags": ["clothed"] },
+            { "text": "{P1} et {P2} alternent caresses de la main sur les sexes.", "text_zh": "{P1} 与 {P2} 轮流用手抚摸对方的性器。" }
+          ]
+        }
+      ]
+    },
+    {
+      "niveau": 4,
+      "actions": [
+        {
+          "id": "p1_to_p2_level4",
+          "actor": "P1",
+          "target": "P2",
+          "templates": [
+            { "text": "{P1} lèche le clitoris de {P2}.", "text_zh": "{P1} 舔 {P2} 的阴蒂。" },
+            { "text": "{P1} lèche la vulve de {P2}.", "text_zh": "{P1} 舔 {P2} 的外阴。" },
+            { "text": "{P1} suce le clitoris de {P2}.", "text_zh": "{P1} 含吮 {P2} 的阴蒂。" },
+            { "text": "{P1} pénètre le vagin de {P2} avec un doigt.", "text_zh": "{P1} 用一根手指进入 {P2} 的阴道。" },
+            { "text": "{P1} pénètre le vagin de {P2} avec deux doigts.", "text_zh": "{P1} 用两根手指进入 {P2} 的阴道。" },
+            { "text": "{P1} fait un va-et-vient des doigts dans le vagin de {P2}.", "text_zh": "{P1} 在 {P2} 的阴道内用手指来回抽动。" },
+            { "text": "{P1} appuie avec ses doigts sur la paroi antérieure du vagin de {P2}.", "text_zh": "{P1} 用手指按压 {P2} 阴道的前壁。" },
+            { "text": "{P1} lèche l’anus de {P2}.", "text_zh": "{P1} 舔 {P2} 的肛门。", "tags": ["anal"] },
+            { "text": "{P1} insère un doigt dans l’anus de {P2}.", "text_zh": "{P1} 将一根手指伸入 {P2} 的肛门。", "tags": ["anal"] },
+            { "text": "{P1} écarte la vulve de {P2} avec ses doigts et lèche le clitoris.", "text_zh": "{P1} 用手指分开 {P2} 的阴唇并舔她的阴蒂。" }
+          ]
+        },
+        {
+          "id": "p2_to_p1_level4",
+          "actor": "P2",
+          "target": "P1",
+          "templates": [
+            { "text": "{P2} lèche le gland de {P1}.", "text_zh": "{P2} 舔 {P1} 的龟头。" },
+            { "text": "{P2} suce le gland de {P1}.", "text_zh": "{P2} 含吮 {P1} 的龟头。" },
+            { "text": "{P2} prend le gland de {P1} en bouche et aspire.", "text_zh": "{P2} 将 {P1} 的龟头含入口中并吸吮。" },
+            { "text": "{P2} prend partiellement le pénis de {P1} en bouche.", "text_zh": "{P2} 将 {P1} 的阴茎部分含入口中。" },
+            { "text": "{P2} branle le pénis de {P1} en rythme.", "text_zh": "{P2} 有节奏地用手套弄 {P1} 的阴茎。" },
+            { "text": "{P2} caresse les testicules de {P1} avec sa main.", "text_zh": "{P2} 用手抚摸 {P1} 的睾丸。" },
+            { "text": "{P2} lèche les testicules de {P1}.", "text_zh": "{P2} 舔 {P1} 的睾丸。" },
+            { "text": "{P2} alterne langue et succion sur le gland de {P1}.", "text_zh": "{P2} 在 {P1} 的龟头上交替使用舌头与吸吮。" },
+            { "text": "{P2} embrasse la base du pénis de {P1} en le tenant.", "text_zh": "{P2} 握住 {P1} 的阴茎并亲吻其根部。" },
+            { "text": "{P2} caresse le périnée de {P1} avec ses doigts.", "text_zh": "{P2} 用手指抚摸 {P1} 的会阴。" }
+          ]
+        },
+        {
+          "id": "mutuelle_level4",
+          "actor": "both",
+          "target": "both",
+          "templates": [
+            { "text": "{P1} lèche la vulve de {P2} pendant qu’elle suce son gland.", "text_zh": "{P1} 舔 {P2} 的外阴，同时她含吮他的龟头。" },
+            { "text": "{P1} pénètre le vagin de {P2} avec ses doigts pendant qu’elle branle son pénis.", "text_zh": "{P1} 用手指进入 {P2} 的阴道，同时她用手套弄他的阴茎。" },
+            { "text": "{P1} suce un mamelon de {P2} pendant qu’elle lèche son téton.", "text_zh": "{P1} 含吮 {P2} 的一侧乳头，同时她舔另一侧。" },
+            { "text": "{P1} caresse le clitoris de {P2} pendant qu’elle caresse ses testicules.", "text_zh": "{P1} 抚摸 {P2} 的阴蒂，同时她抚摸他的睾丸。" },
+            { "text": "{P1} lèche le clitoris de {P2} pendant qu’elle masse la base de son pénis.", "text_zh": "{P1} 舔 {P2} 的阴蒂，同时她按摩他的阴茎根部。" },
+            { "text": "{P1} stimule la vulve de {P2} pendant qu’elle lèche ses testicules.", "text_zh": "{P1} 刺激 {P2} 的外阴，同时她舔他的睾丸。" },
+            { "text": "{P1} caresse la poitrine de {P2} pendant qu’elle embrasse son pénis.", "text_zh": "{P1} 抚摸 {P2} 的胸部，同时她亲吻他的阴茎。" },
+            { "text": "{P1} maintient deux doigts dans le vagin de {P2} pendant qu’elle stimule son gland.", "text_zh": "{P1} 在 {P2} 的阴道内保持两根手指，同时她刺激他的龟头。" },
+            { "text": "{P1} lèche la vulve de {P2} pendant qu’elle caresse le périnée de {P1}.", "text_zh": "{P1} 舔 {P2} 的外阴，同时她抚摸 {P1} 的会阴。" },
+            { "text": "{P1} et {P2} se stimulent à la main en se regardant de près.", "text_zh": "{P1} 与 {P2} 近距离对视，用手互相刺激。" }
+          ]
+        }
+      ]
+    },
+    {
+      "niveau": 5,
+      "actions": [
+        {
+          "id": "p1_to_p2_level5",
+          "actor": "P1",
+          "target": "P2",
+          "templates": [
+            { "text": "{P1} suce le clitoris de {P2} en rythme avec ses doigts dans son vagin.", "text_zh": "{P1} 口含 {P2} 的阴蒂，同时手指在她的阴道内有节奏地动作。" },
+            { "text": "{P1} insère deux doigts dans le vagin de {P2} et stimule son point G.", "text_zh": "{P1} 将两根手指伸入 {P2} 的阴道并刺激她的G点。" },
+            { "text": "{P1} fait un va-et-vient rapide des doigts dans le vagin de {P2}.", "text_zh": "{P1} 在 {P2} 的阴道内快速用手指抽动。" },
+            { "text": "{P1} place un doigt dans le vagin et un doigt dans l’anus de {P2}.", "text_zh": "{P1} 一根手指进入 {P2} 的阴道，另一根手指进入她的肛门。", "tags": ["anal"] },
+            { "text": "{P1} alterne langue sur le clitoris et doigts dans le vagin de {P2}.", "text_zh": "{P1} 在 {P2} 的阴蒂上用舌头交替，同时以手指进入阴道。" },
+            { "text": "{P1} frotte son gland sur le clitoris de {P2} sans pénétrer.", "text_zh": "{P1} 用龟头在 {P2} 的阴蒂上摩擦，不进入。" },
+            { "text": "{P1} frotte son pénis entre les lèvres de {P2} sans entrer.", "text_zh": "{P1} 将阴茎在 {P2} 的阴唇间摩擦，不进入。" },
+            { "text": "{P1} pince les mamelons de {P2} pendant qu’il stimule son clitoris.", "text_zh": "{P1} 夹捏 {P2} 的乳头，同时刺激她的阴蒂。" },
+            { "text": "{P1} lèche l’anus de {P2} tout en caressant sa vulve.", "text_zh": "{P1} 舔 {P2} 的肛门，同时抚摸她的外阴。", "tags": ["anal"] },
+            { "text": "{P1} presse sa paume sur la vulve de {P2} tout en gardant les doigts à l’intérieur.", "text_zh": "{P1} 手掌压在 {P2} 的外阴上，同时手指保持在体内。" },
+            { "text": "{P1} prend la main de {P2} pour la guider sur son pénis.", "text_zh": "{P1} 握住 {P2} 的手，引导她抚弄自己的阴茎。" },
+            { "text": "{P2} suce le pénis de {P1} tout en insérant un doigt dans son anus.", "text_zh": "{P2} 为 {P1} 口交的同时，将一根手指伸入他的肛门。", "tags": ["anal"] }
+          ]
+        },
+        {
+          "id": "p2_to_p1_level5",
+          "actor": "P2",
+          "target": "P1",
+          "templates": [
+            { "text": "{P2} avale le pénis de {P1} entièrement en bouche.", "text_zh": "{P2} 将 {P1} 的阴茎整根含入口中。" },
+            { "text": "{P2} suce le pénis de {P1} avec des va-et-vient rapides.", "text_zh": "{P2} 用快速的来回动作为 {P1} 口交。" },
+            { "text": "{P2} branle le pénis de {P1} tout en le suçant vigoureusement.", "text_zh": "{P2} 一边用力口交，一边用手套弄 {P1} 的阴茎。" },
+            { "text": "{P2} lèche les testicules de {P1} pendant qu’elle suce son gland.", "text_zh": "{P2} 含吮龟头的同时舔 {P1} 的睾丸。" },
+            { "text": "{P2} presse la base du pénis de {P1} pendant la fellation.", "text_zh": "{P2} 口交时按压 {P1} 阴茎的根部。" },
+            { "text": "{P2} caresse le périnée de {P1} avec ses doigts pendant la fellation.", "text_zh": "{P2} 口交时用手指抚摸 {P1} 的会阴。" },
+            { "text": "{P2} glisse un doigt sur l’anus de {P1} tout en le branlant.", "text_zh": "{P2} 一边用手套弄 {P1} 的阴茎，一边用手指在他的肛门上滑过。", "tags": ["anal"] },
+            { "text": "{P2} alterne succion profonde et caresses rapides avec la main.", "text_zh": "{P2} 在深吸吮与快速手部抚弄之间交替。" },
+            { "text": "{P2} maintient le pénis de {P1} bien droit pendant qu’elle aspire le gland.", "text_zh": "{P2} 握稳 {P1} 的阴茎，同时吸吮龟头。" },
+            { "text": "{P2} tourne sa langue autour du gland de {P1} avant de le reprendre en bouche.", "text_zh": "{P2} 用舌头绕着 {P1} 的龟头打圈，然后重新含入口中。" },
+            { "text": "{P2} guide la main de {P1} sur sa vulve pour qu’il la stimule.", "text_zh": "{P2} 把 {P1} 的手引到自己的外阴上让他刺激自己。" },
+            { "text": "{P2} chevauche le visage de {P1}, frottant sa vulve contre sa bouche.", "text_zh": "{P2} 跨坐在 {P1} 的脸上，将外阴在他的嘴上摩擦。", "tags": ["hard"] }
+          ]
+        },
+        {
+          "id": "mutuelle_level5",
+          "actor": "both",
+          "target": "both",
+          "templates": [
+            { "text": "{P1} et {P2} se placent en 69 et se stimulent en même temps.", "text_zh": "{P1} 与 {P2} 采取69体位，同时互相刺激。" },
+            { "text": "{P1} frotte son pénis contre la vulve de {P2} pendant qu’elle caresse ses testicules.", "text_zh": "{P1} 将阴茎在 {P2} 的外阴上摩擦，同时她抚摸他的睾丸。" },
+            { "text": "{P1} caresse le clitoris de {P2} pendant qu’elle suce son gland.", "text_zh": "{P1} 抚摸 {P2} 的阴蒂，同时她含吮他的龟头。" },
+            { "text": "{P1} et {P2} se masturbent mutuellement face à face.", "text_zh": "{P1} 与 {P2} 面对面互相抚慰。" },
+            { "text": "{P1} lèche la vulve de {P2} pendant qu’elle branle son pénis.", "text_zh": "{P1} 舔 {P2} 的外阴，同时她用手套弄他的阴茎。" },
+            { "text": "{P1} et {P2} se frottent sexe contre sexe en s’embrassant.", "text_zh": "{P1} 与 {P2} 接吻时性器相贴互相摩擦。" },
+            { "text": "{P1} pénètre le vagin de {P2} avec ses doigts pendant qu’elle avale son pénis.", "text_zh": "{P1} 用手指进入 {P2} 的阴道，同时她将他的阴茎含入口中。" },
+            { "text": "{P1} maintient ses doigts dans le vagin de {P2} pendant qu’elle suce et branle son pénis.", "text_zh": "{P1} 保持手指在 {P2} 的阴道内，同时她口交并用手套弄他的阴茎。" },
+            { "text": "{P1} roule sa langue sur le clitoris de {P2} pendant qu’elle masse la base de son pénis.", "text_zh": "{P1} 用舌头在 {P2} 的阴蒂上打圈，同时她按摩他的阴茎根部。" },
+            { "text": "{P1} et {P2} alternent stimulation orale et manuelle sans s’arrêter.", "text_zh": "{P1} 与 {P2} 在口部与手部刺激之间不停切换。" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "sexe_positions": [
+    {
+      "id": "missionnaire",
+      "templates": [
+        { "text": "Missionnaire jambes sur épaules : {P2} pose ses jambes sur les épaules de {P1} pendant qu’il la pénètre.", "text_zh": "传统体位（双腿置于肩上）：{P2} 将双腿放在 {P1} 的肩上，{P1} 进行插入。" },
+        { "text": "Missionnaire serré : {P2} croise les chevilles derrière le dos de {P1} pendant la pénétration.", "text_zh": "紧贴传统体位：插入时，{P2} 将脚踝交叉于 {P1} 的背后。" }
+      ]
+    },
+    {
+      "id": "levrette",
+      "templates": [
+        { "text": "Levrette aplatie : {P2} allongée sur le ventre, {P1} la pénètre par derrière en la plaquant.", "text_zh": "俯卧后入位：{P2} 俯卧，{P1} 从后方插入并将身体贴住她。" },
+        { "text": "Levrette classique : {P2} à quatre pattes, {P1} la pénètre par derrière.", "text_zh": "后入位：{P2} 四肢着地，{P1} 从后方插入。" }
+      ]
+    },
+    {
+      "id": "cowgirl",
+      "templates": [
+        { "text": "Cowgirl assise : {P2} s’assoit sur {P1} et contrôle la pénétration en mouvement vertical.", "text_zh": "女上位：{P2} 坐在 {P1} 身上，以上下动作控制插入。" },
+        { "text": "Cowgirl inversée : {P2} s’assoit sur {P1} dos tourné et effectue les mouvements de va-et-vient.", "text_zh": "反女上位：{P2} 背对 {P1} 坐上，进行前后抽动。" }
+      ]
+    },
+    {
+      "id": "cuillere",
+      "templates": [
+        { "text": "Cuillère classique : {P1} allongé derrière {P2}, il la pénètre allongés sur le côté.", "text_zh": "勺子位：二人侧躺，{P1} 在 {P2} 身后插入。" },
+        { "text": "Cuillère jambe levée : {P2} lève la jambe supérieure pendant que {P1} la pénètre.", "text_zh": "勺子位抬腿：{P2} 抬起上侧腿，{P1} 进行插入。" }
+      ]
+    },
+    {
+      "id": "lotus",
+      "templates": [
+        { "text": "Lotus assis : {P1} assis, {P2} s’assoit sur lui face à face et s’enlace.", "text_zh": "莲花位：{P1} 盘坐，{P2} 面对面坐在他身上并相互环抱。" },
+        { "text": "Lotus serré : {P2} enroule ses jambes autour de {P1} en position assise.", "text_zh": "莲花位紧贴：{P2} 在坐姿中用双腿缠绕 {P1} 的腰部。" }
+      ]
+    },
+    {
+      "id": "bord_du_lit",
+      "templates": [
+        { "text": "Papillon : {P2} allongée sur le dos au bord du lit, {P1} debout la pénètre en tenant ses cuisses.", "text_zh": "蝴蝶位（床沿）：{P2} 仰躺在床沿，{P1} 站立抓住她的大腿插入。" },
+        { "text": "Bord du lit jambes sur épaules : {P2} allongée sur le dos au bord du lit, {P1} soulève ses jambes sur ses épaules en la pénétrant.", "text_zh": "床沿抬腿：{P2} 仰躺床沿，{P1} 将她的双腿抬到肩上进行插入。" }
+      ]
+    },
+    {
+      "id": "chaise",
+      "templates": [
+        { "text": "Chaise face à face : {P1} assis sur une chaise, {P2} s’assoit sur lui et le chevauche.", "text_zh": "椅上对坐：{P1} 坐在椅子上，{P2} 坐到他身上骑乘插入。" },
+        { "text": "Chaise inversée : {P1} assis sur une chaise, {P2} s’assoit sur lui dos tourné et contrôle les mouvements.", "text_zh": "椅上反坐：{P1} 坐在椅子上，{P2} 背对他坐上自行控制动作。" }
+      ]
+    },
+    {
+      "id": "contre_le_mur",
+      "templates": [
+        { "text": "Mur face à face : {P2} dos au mur, {P1} debout la pénètre en la tenant.", "text_zh": "墙边面对：{P2} 背靠墙，{P1} 站立抱住她插入。" },
+        { "text": "Mur portée : {P1} soulève {P2} contre le mur et la pénètre debout.", "text_zh": "墙边抱起：{P1} 将 {P2} 抱起抵在墙上站立插入。" }
+      ]
+    },
+    {
+      "id": "brouette",
+      "templates": [
+        { "text": "Brouette classique : {P2} soutient son poids sur les bras, {P1} tient ses cuisses et la pénètre par derrière.", "text_zh": "独轮车式：{P2} 双臂支撑身体，{P1} 托住她的大腿从后方插入。", "tags": ["hard"] },
+        { "text": "Brouette genou appuyé : {P2} garde un genou au sol, {P1} la pénètre en tenant son autre jambe levée.", "text_zh": "独轮车改良：{P2} 单膝着地，{P1} 托起另一条腿从后方插入。", "tags": ["hard"] }
+      ]
+    },
+    {
+      "id": "pile_driver",
+      "templates": [
+        { "text": "Pile driver : {P2} sur le dos, bassin relevé, jambes pliées vers la tête, {P1} la pénètre en se positionnant au-dessus.", "text_zh": "桩机式：{P2} 仰卧抬高骨盆，双腿向头部折起，{P1} 居上方进行插入。", "tags": ["hard"] },
+        { "text": "Pile driver assisté : {P1} maintient les chevilles de {P2} pendant qu’il la pénètre en angle vertical.", "text_zh": "桩机式辅助：{P1} 握住 {P2} 的脚踝，以更垂直的角度插入。", "tags": ["hard"] }
+      ]
+    },
+    {
+      "id": "squat",
+      "templates": [
+        { "text": "Squat au-dessus : {P2} accroupie au-dessus de {P1} allongé, elle s’empale en contrôlant la pénétration.", "text_zh": "深蹲上位：{P2} 在 {P1} 仰卧上方下蹲，自主下坐完成插入。", "tags": ["hard"] },
+        { "text": "Squat dynamique : {P2} accroupie sur {P1}, elle alterne rebonds et enfoncements lents.", "text_zh": "深蹲变速：{P2} 下蹲在 {P1} 身上，交替做短促起落与缓慢下沉。", "tags": ["hard"] }
+      ]
+    },
+    {
+      "id": "debout_face",
+      "templates": [
+        { "text": "Debout face à face : {P1} pénètre {P2} debout en la tenant par les fesses.", "text_zh": "站立相对：{P1} 抱住 {P2} 的臀部站立插入。" },
+        { "text": "Debout semi-portée : {P1} soulève une jambe de {P2} pendant qu’il la pénètre debout.", "text_zh": "站立抬腿：{P1} 抬起 {P2} 的一条腿进行站立插入。", "tags": ["hard"] }
+      ]
+    },
+    {
+      "id": "anal_levrette",
+      "templates": [
+        { "text": "Levrette anale : {P2} à quatre pattes, {P1} la pénètre par l’anus en profondeur.", "text_zh": "后入肛交：{P2} 四肢着地，{P1} 从后方进行肛门插入。", "tags": ["anal"] },
+        { "text": "Levrette anale aplatie : {P2} allongée sur le ventre, {P1} la pénètre par l’anus en la plaquant.", "text_zh": "俯卧肛交：{P2} 俯卧，{P1} 将身体贴住从肛门插入。", "tags": ["anal"] }
+      ]
+    },
+    {
+      "id": "anal_cuillere",
+      "templates": [
+        { "text": "Cuillère anale : {P1} derrière {P2}, ils sont allongés sur le côté, {P1} pénètre son anus.", "text_zh": "勺子位肛交：二人侧躺，{P1} 在 {P2} 身后从肛门插入。", "tags": ["anal"] },
+        { "text": "Cuillère anale jambe levée : {P2} lève une jambe pendant que {P1} pénètre son anus.", "text_zh": "勺子位肛交抬腿：{P2} 抬起上侧腿，{P1} 从肛门插入。", "tags": ["anal"] }
+      ]
+    },
+    {
+      "id": "anal_cowgirl",
+      "templates": [
+        { "text": "Cowgirl anale : {P2} s’assoit sur {P1} et s’empale sur lui par l’anus.", "text_zh": "女上位肛交：{P2} 坐在 {P1} 身上，从肛门坐下完成插入。", "tags": ["anal"] },
+        { "text": "Cowgirl anale inversée : {P2} s’assoit sur {P1} dos tourné et s’empale sur lui par l’anus.", "text_zh": "反女上位肛交：{P2} 背对 {P1} 坐上，从肛门下坐插入。", "tags": ["anal"] }
+      ]
+    },
+    {
+      "id": "anal_contre_le_mur",
+      "templates": [
+        { "text": "Mur anale : {P2} appuyée contre le mur, {P1} la pénètre par l’anus depuis l’arrière.", "text_zh": "墙边肛交：{P2} 背靠墙，{P1} 自后方从肛门插入。", "tags": ["anal", "hard"] },
+        { "text": "Mur anale portée : {P1} soulève {P2} contre le mur et la pénètre par l’anus.", "text_zh": "墙边肛交抱起：{P1} 将 {P2} 抱起抵在墙上，从肛门插入。", "tags": ["anal", "hard"] }
+      ]
+    },
+    {
+      "id": "anal_bord_du_lit",
+      "templates": [
+        { "text": "Bord du lit anale : {P2} allongée au bord du lit sur le dos, {P1} debout la pénètre par l’anus.", "text_zh": "床沿肛交：{P2} 仰躺在床沿，{P1} 站立从肛门插入。", "tags": ["anal"] },
+        { "text": "Bord du lit anale jambes sur épaules : {P1} pénètre l’anus de {P2} en tenant ses jambes sur ses épaules.", "text_zh": "床沿肛交抬腿：{P1} 将 {P2} 的双腿抬到肩上，从肛门插入。", "tags": ["anal"] }
+      ]
+    }
+  ]
+}
