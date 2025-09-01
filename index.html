@@ -18,20 +18,31 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-      <div class="ambient"></div>
+    <div class="ambient"></div>
 
     <div id="app">
-      <header class="app-header">
+      <header class="app-header" id="app-header">
         <h1>Intimacy Coach</h1>
-        <div class="lang-toggle">
-          <button id="btn-fr" class="chip active">FR</button>
-          <button id="btn-zh" class="chip">中文</button>
+
+        <div class="header-actions">
+          <!-- Écran allumé : global -->
+          <div class="keep-awake" title="Empêche l’écran de s’éteindre">
+            <label class="switch">
+              <input type="checkbox" id="keep-awake">
+              <span class="slider"></span>
+            </label>
+            <span class="label" id="keep-awake-label" data-i18n="keep_awake_short">Écran allumé</span>
+          </div>
+
+          <div class="lang-toggle">
+            <button id="btn-fr" class="chip active">FR</button>
+            <button id="btn-zh" class="chip">中文</button>
+          </div>
         </div>
       </header>
 
-      <main>
-        
-        <nav class="tabs">
+      <main id="main">
+        <nav class="tabs" id="tabs">
           <button class="tab active" data-tab="play">
             <img class="tab-ico icon-32" src="./public/icons/ui/tab-play.webp" alt="" />
             <span data-i18n="tab_play">Jouer</span>
@@ -48,73 +59,75 @@
 
         <!-- PLAY -->
         <section id="tab-play" class="tabpanel active">
+          <div class="fit-wrap" data-fit="play">
+            <div class="fit-target">
+              <div class="topbar">
+                <div class="status">
+                  <div class="badges">
+                    <span id="badge-segment" class="badge strong">—</span>
+                  </div>
+                </div>
+              </div>
 
-          <!-- NOUVELLE BARRE HAUTE : statut + veille -->
-          <div class="topbar">
-            <div class="status">
-              <div class="badges">
-                <span id="badge-segment" class="badge strong">—</span>
+              <!-- CARTE LECTEUR D’INTENSITÉ -->
+              <div id="action-card" class="card theme-level1">
+                <!-- visuel + overlay -->
+                <div id="action-visual" class="action-visual" aria-label="Cadre texte sur image">
+                  <div class="action-overlay">
+                    <div class="action-text zh" id="text-zh">—</div>
+                    <div class="action-text fr" id="text-fr">—</div>
+                  </div>
+                </div>
+
+                <div class="divider" role="separator" aria-hidden="true"></div>
+
+                <!-- PLAYER -->
+                <div class="player">
+                  <div class="player-row controls-row">
+                    <button id="btn-prev" class="player-btn" title="Revenir">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6V5zm3.5 7 8.5 6V6l-8.5 6z" fill="currentColor"/></svg>
+                    </button>
+
+                    <button id="btn-start" class="player-btn primary" title="Lecture">
+                      <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="">
+                    </button>
+                    <button id="btn-pause" class="player-btn secondary" title="Pause" hidden>
+                      <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="">
+                    </button>
+
+                    <button id="btn-next" class="player-btn" title="Intensité suivante">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2V5zM6 6l8.5 6L6 18V6z" fill="currentColor"/></svg>
+                    </button>
+
+                    <button id="btn-skip" class="player-btn" title="Passer l’action">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l7 6-7 6V6zm9 0h1.5v12H16V6z" fill="currentColor"/></svg>
+                    </button>
+
+                    <button id="btn-stop" class="player-btn danger" title="Stop" disabled>
+                      <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="">
+                    </button>
+                  </div>
+
+                  <div class="player-row scrub-row">
+                    <span id="time-left" class="time-badge">00:00</span>
+                    <div class="scrubber">
+                      <div id="progress" class="progress"><div id="progress-bar"></div></div>
+                    </div>
+                    <span id="time-total" class="time-badge">00:00</span>
+                  </div>
+
+                  <div class="player-row meta-row" aria-live="polite">
+                    <span id="action-meta" class="meta-chip">—</span>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="keep-awake" title="Empêche l’écran de s’éteindre pendant la session">
-              <label class="switch">
-                <input type="checkbox" id="keep-awake">
-                <span class="slider"></span>
-              </label>
-              <span class="label" id="keep-awake-label" data-i18n="keep_awake_short">Garder l'écran allumé</span>
-            </div>
           </div>
-
-          <!-- Carte d’action : visuel carré + séparateur + timer -->
-          <div id="action-card" class="card theme-level1">
-            <div id="action-visual" aria-label="Cadre texte sur image">
-              <div class="action-overlay">
-                <div class="action-text zh" id="text-zh">—</div>
-                <div class="action-text fr" id="text-fr">—</div>
-              </div>
-            </div>
-
-            <div class="divider" role="separator" aria-hidden="true"></div>
-
-            <div class="timer">
-              <div id="progress" class="progress"><div id="progress-bar"></div></div>
-              <div class="time-row">
-                <span id="time-left">00:00</span>
-                <span id="time-total">00:00</span>
-              </div>
-            </div>
-          </div>
-
-         
-          <div class="controls">
-            <!-- START -->
-            <button id="btn-start" class="primary icon-btn" type="button">
-              <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="">
-              <span class="label" data-i18n="start">Démarrer</span>
-            </button>
-
-            <!-- PAUSE -->
-            <button id="btn-pause" class="secondary icon-btn" type="button" hidden>
-              <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="">
-              <span class="label" data-i18n="pause">Pause</span>
-            </button>
-
-            <!-- STOP -->
-            <button id="btn-stop" class="danger icon-btn" type="button" disabled>
-              <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="">
-              <span class="label" data-i18n="stop">Stop</span>
-            </button>
-          </div>
-
-
-
-          <!-- (ancienne hint-row supprimée) -->
         </section>
 
         <!-- SETTINGS -->
         <section id="tab-settings" class="tabpanel">
-          <div class="grid two">
+          <div class="stack">
             <div class="card">
               <details class="accordion">
                 <summary>👥 <span data-i18n="participants">Participants</span></summary>
@@ -148,59 +161,60 @@
                 <div class="field checkbox"><label><input type="checkbox" id="def-clothed"> <span data-i18n="filter_clothed">Exclure clothed</span></label></div>
               </details>
             </div>
-          </div>
 
-          <div class="card">
-            <details class="accordion">
-              <summary>🧩 <span data-i18n="sequence">Séquence</span></summary>
-              <div id="sequence-list" class="sequence-list" style="margin-top:8px"></div>
+            <div class="card">
+              <details class="accordion">
+                <summary>🧩 <span data-i18n="sequence">Séquence</span></summary>
+                <div id="sequence-list" class="sequence-list" style="margin-top:8px"></div>
 
-              <div class="row add-controls" style="margin-top:8px">
-                <div id="add-seg-chips" class="chip-row"></div>
-                <div class="field inline">
-                  <label data-i18n="minutes_label">Minutes</label>
-                  <div class="input-affix">
-                    <input id="inp-add-min" type="number" min="1" value="3">
-                    <span class="affix" data-i18n="unit_min">min</span>
+                <div class="row add-controls" style="margin-top:8px">
+                  <div id="add-seg-chips" class="chip-row"></div>
+                  <div class="field inline">
+                    <label data-i18n="minutes_label">Minutes</label>
+                    <div class="input-affix">
+                      <input id="inp-add-min" type="number" min="1" value="3">
+                      <span class="affix" data-i18n="unit_min">min</span>
+                    </div>
                   </div>
+                  <button id="btn-add-step" class="secondary" data-i18n="add_step">Ajouter</button>
                 </div>
-                <button id="btn-add-step" class="secondary" data-i18n="add_step">Ajouter</button>
-              </div>
-            </details>
-          </div>
+              </details>
+            </div>
 
-          <div class="card">
-            <details class="accordion">
-              <summary>⏱️ <span data-i18n="durations">Durées min/max par segment (sec)</span></summary>
-              <div class="ranges-grid" style="margin-top:8px"></div>
-            </details>
-          </div>
-
-          <div class="card row">
-            <button id="btn-save" class="primary" data-i18n="save">Enregistrer</button>
-            <button id="btn-reset" class="danger" data-i18n="reset">Réinitialiser</button>
-            <button id="btn-export" class="secondary" data-i18n="export">Exporter</button>
-            <input type="file" id="file-import" accept="application/json" style="display:none" />
-            <button id="btn-import" class="secondary" data-i18n="import">Importer</button>
+            <div class="card">
+              <details class="accordion">
+                <summary>⏱️ <span data-i18n="durations">Durées min/max par segment (sec)</span></summary>
+                <div class="ranges-grid" style="margin-top:8px"></div>
+              </details>
+            </div>
           </div>
         </section>
 
         <!-- DRAW -->
         <section id="tab-draw" class="tabpanel">
-          <div class="card">
-            <div id="draw-intensity-chips" class="chip-row"></div>
-            <div class="controls" style="margin-top:8px">
-              <button id="btn-draw-play" class="primary" data-i18n="play_btn">Jouer</button>
+          <div class="fit-wrap" data-fit="draw">
+            <div class="fit-target">
+              <div class="card">
+                <div id="draw-intensity-chips" class="chip-row"></div>
+                <div class="controls" style="margin-top:8px">
+                  <button id="btn-draw-play" class="primary" data-i18n="play_btn">Jouer</button>
+                </div>
+              </div>
+
+              <div id="draw-card" class="card theme-level1" style="margin-top:12px;display:none">
+                <div id="draw-visual" class="action-visual" aria-label="Cadre texte sur image">
+                  <div class="action-overlay">
+                    <div class="action-text zh" id="draw-zh">—</div>
+                    <div class="action-text fr" id="draw-fr">—</div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div id="draw-card" class="card theme-level1" style="margin-top:12px;display:none">
-            <div class="action-text zh" id="draw-zh">—</div>
-            <div class="action-text fr" id="draw-fr">—</div>
           </div>
         </section>
       </main>
 
-      <footer>
+      <footer id="footer">
         <small>© 2025 — <span>Intimacy Coach</span> • <span data-i18n="offline_ready">PWA hors-ligne</span></small>
       </footer>
     </div>
