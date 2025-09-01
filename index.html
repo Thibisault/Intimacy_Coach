@@ -6,11 +6,18 @@
     <meta name="theme-color" content="#111827" />
     <title>Intimacy Coach</title>
     <meta name="description" content="Séquences érotiques guidées FR + CN avec voix et compte à rebours." />
+
+    <!-- PWA + icônes -->
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./favicon.ico">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Polices -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -35,9 +42,21 @@
           <div class="status">
             <div class="badges"><span id="badge-segment" class="badge strong">—</span></div>
           </div>
+
+          <!-- Carte d’action : visuel (carré 1:1) + séparateur + timer -->
           <div id="action-card" class="card theme-level1">
-            <div class="action-text zh" id="text-zh">—</div>
-            <div class="action-text fr" id="text-fr">—</div>
+            <!-- Cadre image carré avec texte par-dessus -->
+            <div id="action-visual" aria-label="Cadre texte sur image">
+              <div class="action-overlay">
+                <div class="action-text zh" id="text-zh">—</div>
+                <div class="action-text fr" id="text-fr">—</div>
+              </div>
+            </div>
+
+            <!-- Séparateur net entre cadre et timer -->
+            <div class="divider" role="separator" aria-hidden="true"></div>
+
+            <!-- Timer -->
             <div class="timer">
               <div id="progress" class="progress"><div id="progress-bar"></div></div>
               <div class="time-row">
@@ -46,11 +65,13 @@
               </div>
             </div>
           </div>
+
           <div class="controls">
             <button id="btn-start" class="primary" data-i18n="start">Démarrer</button>
             <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
             <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
           </div>
+
           <div class="hint-row">
             <label class="switch"><input type="checkbox" id="keep-awake"><span class="slider"></span></label>
             <span class="hint" data-i18n="keep_awake">Garder l’écran allumé pendant la session</span>
@@ -60,7 +81,6 @@
         <!-- SETTINGS -->
         <section id="tab-settings" class="tabpanel">
           <div class="grid two">
-            <!-- Participants -->
             <div class="card">
               <details class="accordion">
                 <summary>👥 <span data-i18n="participants">Participants</span></summary>
@@ -69,7 +89,6 @@
               </details>
             </div>
 
-            <!-- Cycle acteurs -->
             <div class="card">
               <details class="accordion">
                 <summary>🔁 <span data-i18n="actor_cycle">Cycle acteurs</span></summary>
@@ -77,18 +96,16 @@
               </details>
             </div>
 
-            <!-- Voix -->
             <div class="card">
               <details class="accordion">
                 <summary>🔊 <span data-i18n="voices_title">Voix</span></summary>
                 <div class="field"><label>Voix FR</label><select id="sel-voice-fr"></select></div>
                 <div class="field"><label>Voix 中文</label><select id="sel-voice-zh"></select></div>
                 <button id="btn-test-voices" class="secondary" data-i18n="test_voices">Tester les voix</button>
-                <small style="color:#9ca3af">Conseil: installe une voix FR (France) et une voix 中文 sur ton téléphone pour un accent parfait.</small>
+                <small class="muted-tip">Conseil : installe une voix FR et une voix 中文 pour un accent parfait.</small>
               </details>
             </div>
 
-            <!-- Filtres -->
             <div class="card">
               <details class="accordion">
                 <summary>🪄 <span data-i18n="filters_title">Exclusions par défaut</span></summary>
@@ -99,14 +116,11 @@
             </div>
           </div>
 
-          <!-- Séquence (fermée par défaut) -->
           <div class="card">
             <details class="accordion">
               <summary>🧩 <span data-i18n="sequence">Séquence</span></summary>
-
               <div id="sequence-list" class="sequence-list" style="margin-top:8px"></div>
 
-              <!-- Ajout d'une intensité via chips (plus de select) -->
               <div class="row add-controls" style="margin-top:8px">
                 <div id="add-seg-chips" class="chip-row"></div>
                 <div class="field inline">
@@ -121,7 +135,6 @@
             </details>
           </div>
 
-          <!-- Durées min/max -->
           <div class="card">
             <details class="accordion">
               <summary>⏱️ <span data-i18n="durations">Durées min/max par segment (sec)</span></summary>
@@ -158,6 +171,7 @@
       </footer>
     </div>
 
+    <!-- JS -->
     <script type="module" src="./js/i18n.js"></script>
     <script type="module" src="./js/util.js"></script>
     <script type="module" src="./js/storage.js"></script>

@@ -2,12 +2,20 @@
 :root {
   --bg:#0b0f17; --fg:#e5e7eb; --muted:#9ca3af; --card:#111827; --accent:#6ee7b7; --danger:#ef4444; --warn:#f59e0b;
   --level1:#60a5fa; --level2:#34d399; --level3:#fbbf24; --level4:#f472b6; --level5:#f87171; --sexe:#a78bfa;
+  --overlay: rgba(0,0,0,0.35); /* voile par-dessus l'image pour la lisibilité */
 }
+
 *{box-sizing:border-box}
-html,body{height:100%;}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;
-     background:linear-gradient(180deg, #0b0f17 0%, #111827 100%); color:var(--fg);}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+  background:linear-gradient(180deg, #0b0f17 0%, #111827 100%);
+  color:var(--fg);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
 #app{max-width:720px;margin:0 auto;padding:12px;display:flex;flex-direction:column;min-height:100%}
+
 .app-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
 .app-header h1{font-size:1.25rem;margin:0}
 .lang-toggle .chip{background:#1f2937;color:#fff;border:none;border-radius:999px;padding:6px 10px;margin-left:6px;opacity:.7}
@@ -24,18 +32,70 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvet
 .badge{background:#1f2937;border-radius:8px;padding:4px 8px;font-size:.95rem}
 .badge.strong{outline:2px solid var(--accent); background:#0b1321}
 
-.card{background:var(--card);border:1px solid #1f2937;border-radius:16px;padding:14px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
-#action-card{padding:18px;}
+.card{
+  background:var(--card);
+  border:1px solid #1f2937;
+  border-radius:16px;
+  padding:14px;
+  box-shadow:0 10px 24px rgba(0,0,0,.25);
+}
 
-.action-text{font-size:1.75rem;line-height:1.3;margin:8px 0;text-align:center;word-break:break-word}
-.action-text.zh{font-family:system-ui,'PingFang SC','Noto Sans CJK SC','Microsoft YaHei',sans-serif}
-.action-text.fr{font-family:system-ui,Roboto,Segoe UI,Arial}
+/* ========== ACTION CARD ========== */
+/* 1) Cadre visuel carré pour une image 1024x1024 (s’adapte en responsive) */
+#action-card{ padding:18px; position:relative; }
+#action-visual{
+  position:relative;
+  width:100%;
+  aspect-ratio:1 / 1;                 /* carré parfait */
+  background:url("./test.png") center/contain no-repeat var(--card); /* image entière (contain) */
+  border-radius:12px;
+  overflow:hidden;
+}
+#action-visual::before{
+  content:"";
+  position:absolute; inset:0;
+  background:var(--overlay);          /* voile sombre pour le texte */
+  z-index:0;
+}
 
-.timer{margin-top:12px}
+/* 2) Texte centré par-dessus l’image */
+.action-overlay{
+  position:absolute; inset:0; z-index:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding:12px; text-align:center;
+}
+.action-text{
+  line-height:1.3; margin:0; word-break:break-word;
+}
+.action-text.zh{
+  font-family:"Playfair Display", serif;
+  font-size:1.6rem; font-weight:600; color:#fefefe;
+  text-shadow:0 2px 6px rgba(0,0,0,0.8);
+  background:rgba(0,0,0,0.28);
+  padding:6px 12px; border-radius:10px;
+}
+.action-text.fr{
+  font-size:1.2rem; color:#f1f1f1;
+  text-shadow:0 2px 4px rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.22);
+  padding:6px 12px; border-radius:10px;
+}
+
+/* 3) Séparateur net entre le cadre et le timer */
+.divider{
+  height:1px; margin:14px 2px 10px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  border-radius:999px;
+}
+
+/* 4) Timer sous le cadre, bien séparé */
+.timer{ margin-top:0 }
 .progress{height:10px;background:#0b0f17;border-radius:999px;overflow:hidden;border:1px solid #1f2937}
 #progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#6ee7b7,#60a5fa);transition:width .15s linear}
 .time-row{display:flex;justify-content:space-between;margin-top:6px;color:var(--muted);font-variant-numeric:tabular-nums}
+.time-row span{background:rgba(0,0,0,0.18); padding:2px 8px; border-radius:8px}
 
+/* ========== Divers UI existants ========== */
 .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
 button{border:none;border-radius:12px;padding:10px 12px;color:#fff;background:#374151;min-width:90px}
 button.primary{background:#2563eb}
@@ -77,7 +137,6 @@ button:disabled{opacity:.5}
 .theme-level5{outline:2px solid var(--level5)}
 .theme-sexe{outline:2px solid var(--sexe)}
 
-/* ambient background */
 body[data-intensity="L1"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(96,165,250,0.12) 100%)}
 body[data-intensity="L2"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(52,211,153,0.12) 100%)}
 body[data-intensity="L3"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(251,191,36,0.12) 100%)}
@@ -85,7 +144,6 @@ body[data-intensity="L4"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(24
 body[data-intensity="L5"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(248,113,113,0.12) 100%)}
 body[data-intensity="SEXE"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(167,139,250,0.12) 100%)}
 
-/* draw chips + mode buttons */
 .chip-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .mode-buttons{display:flex;gap:8px;flex-wrap:wrap}
 .chip{background:#1f2937;color:#fff;border:none;border-radius:999px;padding:8px 12px}
@@ -105,19 +163,18 @@ footer{margin-top:auto;padding:12px 0;color:var(--muted);text-align:center}
 .accordion>summary{cursor:pointer; list-style:none; font-weight:600; color:#e5e7eb}
 .accordion>summary::-webkit-details-marker{display:none}
 
-/* Inputs minimalistes avec unité */
 .field.inline{flex-direction:row;align-items:center;gap:10px}
 .input-affix{display:inline-flex;align-items:center;background:#0b0f17;border:1px solid #1f2937;border-radius:999px;padding:6px 10px}
 .input-affix input{all:unset;color:#fff;width:60px;text-align:center}
 .input-affix .affix{color:var(--muted);margin-left:6px}
 
-/* Bouton minuscule (delete) */
 button.tiny{min-width:auto;padding:6px 8px;border-radius:8px}
 
-/* Séquence: drag & drop */
 .sequence-list .row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;background:#1f2937;border-radius:12px;padding:8px}
 .drag-handle{cursor:grab;font-size:1.1rem;opacity:.8}
 .dragging{opacity:.6}
 .drop-target{outline:2px dashed var(--accent)}
 .seg{min-width:140px;text-align:center;background:#0b0f17;border-radius:999px;padding:8px}
 
+/* Tip grisé */
+.muted-tip{color:#9ca3af}
