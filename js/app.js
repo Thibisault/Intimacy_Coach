@@ -1,4 +1,5 @@
-// Lecteur + UI responsives (fit-to-viewport) + keep-awake global
+// Lecteur d'intensités : back/intelligent, next, skip action, play/pause, stop.
+// Bar de progression = temps de l'INTENSITÉ (pas de l'action)
 import { applyI18n, dict, getIntensityName } from './i18n.js';
 import { sleep, formatMMSS, themeClass } from './util.js';
 import { loadSettings, saveSettings } from './storage.js';
@@ -26,24 +27,22 @@ const DEFAULTS = {
   filters: { anal:true, hard:true, clothed:true },
   lang: 'fr',
   voicePrefs: { fr:null, zh:null },
-  keepAwake: false, // NEW: global & persistant
 };
 
 let settings = Object.assign({}, DEFAULTS, loadSettings() || {});
 let data = null;
-let plan = [];
+let plan = [];                 // Array<Array<Action>>
 let running = false, paused = false, cancelled = false;
 let voices = { zh:null, fr:null };
 const tts = new SpeechQueue();
 
-// Pointeurs
-let segIdx = 0;
-let actIdx = 0;
-let segTotal = 0;
-let segElapsed = 0;
-let navCommand = null;
-let _fitTimer = null;
-const PREV_THRESHOLD_SEC = 6;
+// Pointeurs de lecture
+let segIdx = 0;                // index d'intensité courant
+let actIdx = 0;                // index d'action courant (dans l'intensité)
+let segTotal = 0;              // total secondes de l'intensité
+let segElapsed = 0;            // écoulé au sein de l'intensité
+let navCommand = null;         // 'next' | 'prevSmart' | 'skip' | 'stop'
+const PREV_THRESHOLD_SEC = 6;  // logique “lecteur classique”
 
 // ---------- Boot ----------
 applyI18n(settings.lang);
@@ -53,10 +52,6 @@ initSettingsUI();
 wirePlayerUI();
 initDrawTab();
 loadData();
-initGlobalKeepAwake();
-setupFitToViewport(); // responsive scaler
-
-
 
 // ---------- Data ----------
 async function loadData(){
@@ -72,10 +67,10 @@ async function loadData(){
 function rebuildPlan(){
   if(!data) return;
   plan = buildPlan(settings, data);
+  // sécurise pointeurs si la séquence change
   segIdx = Math.min(segIdx, Math.max(0, plan.length-1));
   actIdx = 0;
   updatePlayerButtons();
-  refitActivePanelSoon();
 }
 
 // ---------- Tabs ----------
@@ -98,8 +93,6 @@ function initTabs(){
       if(id === 'draw'){
         try { tts.cancel(); speechSynthesis.cancel(); speechSynthesis.resume(); } catch {}
       }
-
-      refitActivePanelSoon();
     });
   });
 }
@@ -111,41 +104,20 @@ function wireLangButtons(){
   const setActive = (lang) => {
     settings.lang = lang;
     applyI18n(lang);
-    window._refreshSequence?.();
-    window._refreshAddControls?.();
-    window._refreshRanges?.();
-    window._refreshActorButtons?.();
-    initDrawTab.refresh?.();
+    if (typeof window._refreshSequence === 'function') window._refreshSequence();
+    if (typeof window._refreshAddControls === 'function') window._refreshAddControls();
+    if (typeof window._refreshRanges === 'function') window._refreshRanges();
+    if (typeof window._refreshActorButtons === 'function') window._refreshActorButtons();
+    if (typeof initDrawTab?.refresh === 'function') initDrawTab.refresh();
     saveSettings(settings);
     frBtn.classList.toggle('active', lang === 'fr');
     zhBtn.classList.toggle('active', lang === 'zh');
-    refitActivePanelSoon();
   };
   frBtn.onclick = () => setActive('fr');
   zhBtn.onclick = () => setActive('zh');
 }
 
-// ---------- Keep-awake (GLOBAL) ----------
-function initGlobalKeepAwake(){
-  const ck = document.getElementById('keep-awake');
-  ck.checked = !!settings.keepAwake;
-  const apply = async (on) => {
-    settings.keepAwake = !!on;
-    saveSettings(settings);
-    if(on){
-      const ok = await enableWakeLock();
-      if(!ok) startAudioKeepAlive();
-    }else{
-      stopAudioKeepAlive();
-      await disableWakeLock();
-    }
-  };
-  ck.addEventListener('change', (e)=>apply(e.target.checked));
-  // activer au boot si nécessaire
-  if(ck.checked) apply(true);
-}
-
-// ---------- Settings UI ----------
+// ---------- Settings UI (autosave) ----------
 function initSettingsUI(){
   const p1 = document.getElementById('inp-p1');
   const p2 = document.getElementById('inp-p2');
@@ -156,7 +128,7 @@ function initSettingsUI(){
     settings.participants.P1 = p1.value || 'Homme';
     settings.participants.P2 = p2.value || 'Femme';
     saveSettings(settings);
-    window._refreshActorButtons?.();
+    if (typeof window._refreshActorButtons === 'function') window._refreshActorButtons();
   };
   p1.addEventListener('input', commitNames);
   p2.addEventListener('input', commitNames);
@@ -329,13 +301,20 @@ function wirePlayerUI(){
   document.getElementById('btn-prev').onclick  = ()=> { navCommand='prevSmart'; };
   document.getElementById('btn-skip').onclick  = ()=> { navCommand='skip'; };
 
+  document.getElementById('keep-awake').addEventListener('change', async (e)=>{
+    if(e.target.checked){ const ok = await enableWakeLock(); if(!ok) startAudioKeepAlive(); }
+    else { disableWakeLock(); stopAudioKeepAlive(); }
+  });
+
   updatePlayerButtons();
 }
 
 function updatePlayerButtons(){
   const next = document.getElementById('btn-next');
   next.disabled = isLastSegment();
+  // prev toujours cliquable (restart si “trop tard”)
 }
+
 function isLastSegment(){ return segIdx >= (plan?.length||0) - 1; }
 
 // ---------- Voices ----------
@@ -352,7 +331,7 @@ async function ensureVoices(){
   });
 }
 
-// ---------- Theme / UI ----------
+// ---------- Theme / UI helpers ----------
 function setTheme(seg){
   const card = document.getElementById('action-card');
   card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
@@ -389,23 +368,26 @@ async function startSession(){
   segIdx = Math.max(0, segIdx); actIdx = Math.max(0, actIdx);
 
   setUIState('running');
-  // ne touche pas au keep-awake global ici (respecte le switch)
-  if(settings.keepAwake){ const ok = await enableWakeLock(); if(!ok) startAudioKeepAlive(); }
+  startAudioKeepAlive();
 
   while(running && !cancelled && segIdx < plan.length){
     const seg = plan[segIdx];
     if(!seg || seg.length===0){ segIdx++; continue; }
 
+    // Thème de l'intensité
     const segName = seg[0]?.segment || 'L1';
     setTheme(segName);
 
+    // Totaux de l'intensité (incl. cooldowns)
     const cd = settings.cooldownSec||0;
     segTotal = seg.reduce((s,a)=>s + a.duration, 0) + cd * Math.max(0, seg.length-1);
     segElapsed = 0;
 
+    // Timer initial
     setSegTimerUI(segTotal, segTotal);
     setActionMeta(actIdx, seg.length, '');
 
+    // Parcourt les actions de l'intensité
     let leaveSegment = false;
     for(; actIdx < seg.length; actIdx++){
       if(cancelled){ leaveSegment=true; break; }
@@ -414,15 +396,21 @@ async function startSession(){
       setOverlayTexts(act.text, act.text_zh);
       tts.cancel(); interruptAndSpeakCNFR(tts, act.text_zh, act.text, voices);
 
+      // Compte à rebours de l'action avec commandes
       const r = await runActionCountdown(act.duration);
       if(r === 'jump-next'){ leaveSegment = true; segIdx++; actIdx=0; break; }
       if(r === 'jump-prev-smart'){
-        if(segElapsed <= PREV_THRESHOLD_SEC){ segIdx = Math.max(0, segIdx-1); actIdx = 0; }
-        else{ actIdx = 0; }
+        // si “peu de temps passé” → intensité précédente, sinon restart intensité
+        if(segElapsed <= PREV_THRESHOLD_SEC){
+          segIdx = Math.max(0, segIdx-1); actIdx = 0;
+        }else{
+          actIdx = 0; // restart cette intensité
+        }
         leaveSegment = true; break;
       }
       if(r === 'stopped'){ stopSession(); return; }
 
+      // Cooldown entre actions
       if(cd>0 && actIdx < seg.length-1){
         setOverlayTexts('—','—');
         const r2 = await runActionCountdown(cd);
@@ -436,18 +424,29 @@ async function startSession(){
       }
     }
 
-    if(!leaveSegment){ segIdx++; actIdx=0; }
+    if(!leaveSegment){
+      // Fin normale de l'intensité → passe à la suivante
+      segIdx++; actIdx=0;
+    }
+
+    // boucle while continue avec la prochaine intensité
   }
 
   stopSession();
 }
 
+// compte à rebours “action” (met à jour le timer d'INTENSITÉ)
 async function runActionCountdown(duration){
+  // navCommand peut être 'skip'/'next'/'prevSmart'/'stop'
   if(duration <= 0) return 'ok';
+
   for(let left = duration; left > 0; ){
     if(cancelled) return 'stopped';
+
+    // Gestion pause
     while(paused){ await sleep(120); if(cancelled) return 'stopped'; }
 
+    // Consommation de commandes
     if(navCommand){
       const cmd = navCommand; navCommand = null;
       if(cmd === 'stop')    return 'stopped';
@@ -456,15 +455,20 @@ async function runActionCountdown(duration){
       if(cmd === 'prevSmart') return 'jump-prev-smart';
     }
 
+    // tick d'1 seconde précis
     const target = performance.now() + 1000;
-    left -= 1; segElapsed += 1;
+    left -= 1;
+    segElapsed += 1;
 
+    // UI
     setSegTimerUI(Math.max(0, segTotal - segElapsed), segTotal);
     setActionMeta(actIdx, plan[segIdx]?.length||0, '');
 
+    // attente ajustée
     const wait = Math.max(0, target - performance.now());
     await sleep(wait);
   }
+
   return 'ok';
 }
 
@@ -486,11 +490,9 @@ function stopSession(){
   tts.cancel();
   setOverlayTexts('—','—'); setSegTimerUI(0,0);
   setUIState('idle');
-  // Respecte le switch global
-  if(!settings.keepAwake){ stopAudioKeepAlive(); disableWakeLock(); }
+  stopAudioKeepAlive(); disableWakeLock();
   navCommand = null;
   updatePlayerButtons();
-  refitActivePanelSoon();
 }
 
 function setUIState(state){
@@ -546,11 +548,11 @@ function initDrawTab(){
     document.getElementById('draw-fr').textContent = pick ? pick.text : '—';
     document.getElementById('draw-zh').textContent = pick ? (pick.text_zh || '—') : '—';
     if(pick){ interruptAndSpeakCNFR(tts, pick.text_zh, pick.text, voices); }
-    refitActivePanelSoon();
   };
 }
 
 // ---------- Micro-interactions ----------
+// Ripple doux
 document.addEventListener('pointerdown', (e)=>{
   const b = e.target.closest('button');
   if(!b) return;
@@ -559,7 +561,7 @@ document.addEventListener('pointerdown', (e)=>{
   b.style.setProperty('--my', `${e.clientY - rect.top}px`);
 });
 
-// Tilt subtil
+// Tilt subtil sur visuels
 (() => {
   const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
   if (reduce) return;
@@ -577,66 +579,3 @@ document.addEventListener('pointerdown', (e)=>{
     box.addEventListener('pointerleave', reset);
   });
 })();
-
-/* ===== Responsive fit-to-viewport ===== */
-function setupFitToViewport(){
-  const header = document.getElementById('app-header');
-  const tabs   = document.getElementById('tabs');
-  const footer = document.getElementById('footer');
-
-  function availableHeight(){
-    const vh = window.innerHeight; // already svh on modern mobile
-    const h = header.getBoundingClientRect().height;
-    const t = tabs.getBoundingClientRect().height;
-    const f = footer.getBoundingClientRect().height;
-    // petite marge interne de #app (~22px)
-    return Math.max(120, vh - h - t - f - 22);
-  }
-
-  function fitSection(sectionId){
-    const panel = document.getElementById('tab-'+sectionId);
-    if(!panel || !panel.classList.contains('active')) return;
-    const wrap = panel.querySelector('.fit-wrap');
-    const target = panel.querySelector('.fit-target');
-    if(!wrap || !target) return;
-
-    // Fixe la hauteur conteneur
-    const ah = availableHeight();
-    wrap.style.height = ah + 'px';
-
-    // mesuré à l'échelle 1
-    target.style.setProperty('--fit-scale', 1);
-    target.style.transform = 'scale(1)';
-    const rect = target.getBoundingClientRect();
-    const wrapRect = wrap.getBoundingClientRect();
-
-    const sx = wrapRect.width  / rect.width;
-    const sy = wrapRect.height / rect.height;
-    // limite : pas trop d'upscale pour garder la netteté
-    const scale = Math.max(0.70, Math.min(1.10, Math.min(sx, sy)));
-
-    target.style.setProperty('--fit-scale', scale);
-    target.style.transform = `scale(${scale})`;
-  }
-
-  // Observers
-  const ro = new ResizeObserver(()=>refitActivePanelSoon());
-  ro.observe(document.body);
-
-  // exposer
-  window._fitPlay  = ()=>fitSection('play');
-  window._fitDraw  = ()=>fitSection('draw');
-
-  refitActivePanelSoon();
-}
-
-function refitActivePanelSoon(){
-  clearTimeout(_fitTimer);
-  _fitTimer = setTimeout(()=>{
-    if(document.getElementById('tab-play')?.classList.contains('active')) window._fitPlay?.();
-    if(document.getElementById('tab-draw')?.classList.contains('active')) window._fitDraw?.();
-  }, 20);
-}
-
-window.addEventListener('orientationchange', ()=>refitActivePanelSoon());
-window.addEventListener('resize', ()=>refitActivePanelSoon());
