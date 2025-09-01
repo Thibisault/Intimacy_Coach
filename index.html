@@ -6,8 +6,6 @@
     <meta name="theme-color" content="#111827" />
     <title>Intimacy Coach</title>
     <meta name="description" content="Séquences érotiques guidées FR + CN avec voix et compte à rebours." />
-
-    <!-- PWA -->
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./favicon.ico">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
@@ -17,10 +15,11 @@
     <!-- Polices -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+      <div class="ambient"></div>
+
     <div id="app">
       <header class="app-header">
         <h1>Intimacy Coach</h1>
@@ -32,14 +31,25 @@
 
       <main>
         <nav class="tabs">
-          <button class="tab active" data-tab="play">▶️ <span data-i18n="tab_play">Jouer</span></button>
-          <button class="tab" data-tab="settings">⚙️ <span data-i18n="tab_settings">Personnaliser</span></button>
-          <button class="tab" data-tab="draw">🎲 <span data-i18n="tab_draw">Tirage simple</span></button>
+          <button class="tab active" data-tab="play">
+            <img class="tab-ico" src="./public/icons/ui/tab-play.webp" alt="" />
+            <span data-i18n="tab_play">Jouer</span>
+          </button>
+          <button class="tab" data-tab="settings">
+            <img class="tab-ico" src="./public/icons/ui/tab-settings.webp" alt="" />
+            <span data-i18n="tab_settings">Personnaliser</span>
+          </button>
+          <button class="tab" data-tab="draw">
+            <img class="tab-ico" src="./public/icons/ui/tab-draw.webp" alt="" />
+            <span data-i18n="tab_draw">Tirage simple</span>
+          </button>
         </nav>
+
 
         <!-- PLAY -->
         <section id="tab-play" class="tabpanel active">
-          <!-- Barre haute : statut + veille -->
+
+          <!-- NOUVELLE BARRE HAUTE : statut + veille -->
           <div class="topbar">
             <div class="status">
               <div class="badges">
@@ -47,33 +57,26 @@
               </div>
             </div>
 
-            <div class="keep-awake" title="Autorise l’écran à s’éteindre pendant la session">
-              <label class="switch" aria-label="Veille">
+            <div class="keep-awake" title="Empêche l’écran de s’éteindre pendant la session">
+              <label class="switch">
                 <input type="checkbox" id="keep-awake">
                 <span class="slider"></span>
               </label>
-              <span class="label" id="keep-awake-label" data-i18n="keep_awake_short">Veille</span>
+              <span class="label" id="keep-awake-label" data-i18n="keep_awake_short">Garder l'écran allumé</span>
             </div>
           </div>
 
-          <!-- Carte d’action -->
+          <!-- Carte d’action : visuel carré + séparateur + timer -->
           <div id="action-card" class="card theme-level1">
-            <div id="action-visual" class="skeleton" aria-label="Cadre texte sur image">
-              <!-- Image animée -->
-              <img id="action-image" src="./test.png" alt="" />
-              <!-- Voile géré via ::before en CSS -->
-
-              <!-- Texte par-dessus -->
+            <div id="action-visual" aria-label="Cadre texte sur image">
               <div class="action-overlay">
                 <div class="action-text zh" id="text-zh">—</div>
                 <div class="action-text fr" id="text-fr">—</div>
               </div>
             </div>
 
-            <!-- Séparateur -->
             <div class="divider" role="separator" aria-hidden="true"></div>
 
-            <!-- Timer -->
             <div class="timer">
               <div id="progress" class="progress"><div id="progress-bar"></div></div>
               <div class="time-row">
@@ -81,16 +84,30 @@
                 <span id="time-total">00:00</span>
               </div>
             </div>
-
-            <!-- Indicateur TTS -->
-            <div id="tts-ind" aria-hidden="true"><span></span><span></span><span></span></div>
           </div>
 
           <div class="controls">
-            <button id="btn-start" class="primary" data-i18n="start">Démarrer</button>
-            <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
-            <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
-          </div>
+            <button id="btn-start" class="primary icon-btn icon-only" type="button">
+              <img class="icon icon-32"
+                  src="./public/icons/ui/btn-start.webp" alt="">
+              <span class="label" data-i18n="Démarrer"></span>
+            </button>
+
+            <button id="btn-pause" class="secondary icon-btn" type="button" hidden>
+              <img class="icon icon-32"
+                  src="./public/icons/ui/btn-pause.webp" alt="">
+              <span class="label" data-i18n="pause">Pause</span>
+            </button>
+
+            <button id="btn-stop" class="danger icon-btn" type="button" disabled>
+              <img class="icon icon-32"
+                  src="./public/icons/ui/btn-stop.webp" alt="">
+              <span class="label" data-i18n="stop">Stop</span>
+            </button>
+
+
+
+          <!-- (ancienne hint-row supprimée) -->
         </section>
 
         <!-- SETTINGS -->
@@ -186,10 +203,7 @@
       </footer>
     </div>
 
-    <!-- GSAP (CDN global) -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-
-    <!-- JS modules -->
+    <!-- JS -->
     <script type="module" src="./js/i18n.js"></script>
     <script type="module" src="./js/util.js"></script>
     <script type="module" src="./js/storage.js"></script>
@@ -198,7 +212,6 @@
     <script type="module" src="./js/wake-lock.js"></script>
     <script type="module" src="./js/planner.js"></script>
     <script type="module" src="./js/app.js"></script>
-
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
