@@ -52,6 +52,7 @@ initSettingsUI();
 wirePlayerUI();
 initDrawTab();
 loadData();
+renderSegmentQueue(); 
 
 // ---------- Data ----------
 async function loadData(){
@@ -70,6 +71,7 @@ function rebuildPlan(){
   // sécurise pointeurs si la séquence change
   segIdx = Math.min(segIdx, Math.max(0, plan.length-1));
   actIdx = 0;
+  renderSegmentQueue();
   updatePlayerButtons();
 }
 
@@ -112,6 +114,7 @@ function wireLangButtons(){
     saveSettings(settings);
     frBtn.classList.toggle('active', lang === 'fr');
     zhBtn.classList.toggle('active', lang === 'zh');
+    renderSegmentQueue();
   };
   frBtn.onclick = () => setActive('fr');
   zhBtn.onclick = () => setActive('zh');
@@ -331,13 +334,49 @@ async function ensureVoices(){
   });
 }
 
+
+
 // ---------- Theme / UI helpers ----------
+
+function renderSegmentQueue(startIdxOverride = null){
+  const cont = document.getElementById('seg-badges') || document.querySelector('.badges');
+  if(!cont) return;
+  cont.innerHTML = '';
+
+  const start = (startIdxOverride !== null)
+    ? Math.max(0, startIdxOverride)
+    : (running ? segIdx : 0);
+
+  const seq = settings.sequence || [];
+  for(let i = start; i < seq.length; i++){
+    const segCode = seq[i].segment;
+    const el = document.createElement('span');
+    el.className = 'badge ' + ((running && i === segIdx) ? 'current' : 'upcoming');
+    el.dataset.seg = segCode;
+
+    // contenu = couche de remplissage + texte
+    const fill = document.createElement('span'); fill.className = 'fill';
+    const txt  = document.createElement('span'); txt.className = 'txt';
+    txt.textContent = getIntensityName(segCode, settings.lang);
+
+    // astuce: tooltip indiquant nombre d’actions (si plan déjà prêt)
+    if (plan?.[i]?.length) {
+      el.title = `${txt.textContent} • ${plan[i].length} actions`;
+    }
+
+    el.append(fill, txt);
+    cont.appendChild(el);
+  }
+}
+
+
+
 function setTheme(seg){
   const card = document.getElementById('action-card');
   card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
   card.classList.add(themeClass(seg));
   document.body.setAttribute('data-intensity', seg);
-  document.getElementById('badge-segment').textContent = getIntensityName(seg, settings.lang);
+renderSegmentQueue();
   updatePlayerButtons();
 }
 
@@ -351,6 +390,11 @@ function setSegTimerUI(left, total){
   document.getElementById('time-total').textContent = formatMMSS(total);
   const pct = total ? ((total-left)/total)*100 : 0;
   document.getElementById('progress-bar').style.width = pct.toFixed(2) + '%';
+  // Remplissage du badge courant (file d’intensités)
+  const badge = document.querySelector('#seg-badges .badge.current');
+  if (badge) {
+    badge.style.setProperty('--pct', pct.toFixed(2) + '%');
+  }
 }
 
 function setActionMeta(idx, of, labelFR){
@@ -493,6 +537,7 @@ function stopSession(){
   stopAudioKeepAlive(); disableWakeLock();
   navCommand = null;
   updatePlayerButtons();
+  renderSegmentQueue(0);
 }
 
 function setUIState(state){

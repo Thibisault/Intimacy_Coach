@@ -95,13 +95,78 @@ body{
 
 /* Topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
-.badges{display:flex;gap:8px;flex-wrap:wrap}
-.badge{
-  background:color-mix(in oklab, var(--card-bg) 92%, transparent);
-  border-radius:999px; padding:6px 10px; font-size:.95rem; backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 0 1px var(--card-border);
+
+/* ===== File d’intensités colorée ===== */
+
+/* conteneur scrollable et clean */
+.badges{
+  display:flex; gap:8px; flex-wrap:nowrap;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  padding-bottom:2px; mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
 }
-.badge.strong{box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--accent) 60%, transparent)}
+
+/* badge “pilule” avec couche de remplissage + shimmer */
+.badge{
+  position:relative; overflow:hidden;
+  background: color-mix(in oklab, var(--card-bg) 92%, transparent);
+  border-radius:999px; padding:6px 12px;
+  border:1px solid var(--card-border);
+  line-height:1; white-space:nowrap;
+  user-select:none;
+  transition: transform .18s var(--easing), box-shadow .18s var(--easing), opacity .18s var(--easing);
+}
+
+/* couleurs par intensité (indépendantes de body[data-intensity]) */
+.badge[data-seg="L1"]{ --c1:#d17aa6; --c2:#f0c9a6; }
+.badge[data-seg="L2"]{ --c1:#c27b57; --c2:#e8b076; }
+.badge[data-seg="L3"]{ --c1:#cf6f4f; --c2:#eba759; }
+.badge[data-seg="L4"]{ --c1:#cf2b6b; --c2:#ff7ab2; }
+.badge[data-seg="L5"]{ --c1:#c2203f; --c2:#ff6b6b; }
+.badge[data-seg="SEXE"]{ --c1:#9e3bd6; --c2:#e3b3ff; }
+
+/* rendu par défaut (upcoming) */
+.badge.upcoming{
+  background: linear-gradient(180deg, color-mix(in oklab, var(--c1) 28%, #000 8%), color-mix(in oklab, var(--c1) 12%, #000 0%));
+  border-color: color-mix(in oklab, var(--c1) 30%, var(--card-border));
+  color:#fff; opacity:.95;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 6px 20px color-mix(in oklab, var(--c1) 14%, transparent);
+}
+.badge.upcoming:hover{ transform:translateY(-1px) }
+
+/* badge courant : outline + shimmer + remplissage progressif */
+.badge.current{
+  color:#fff;
+  border-color: color-mix(in oklab, var(--c1) 55%, var(--card-border));
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--c1) 55%, transparent),
+    0 10px 26px color-mix(in oklab, var(--c1) 28%, transparent);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--c1) 45%, #000 8%), color-mix(in oklab, var(--c2) 22%, #000 0%));
+  transform: translateY(-1px);
+}
+
+/* couche de remplissage gauche→droite pour le progrès (pilotée en JS via --pct) */
+.badge .fill{
+  position:absolute; inset:0 auto 0 0; width:var(--pct, 0%); pointer-events:none;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--c2) 65%, #000 0%), color-mix(in oklab, var(--c1) 55%, #000 0%));
+  opacity:.55;
+  transition: width .18s linear, opacity .18s var(--easing);
+}
+
+/* effet “shimmer” diagonal subtil */
+.badge.current::after{
+  content:""; position:absolute; inset:-150% -50%; pointer-events:none;
+  background: linear-gradient(60deg, transparent 40%, rgba(255,255,255,.25) 50%, transparent 60%);
+  animation: shimmer 3s var(--easing) infinite;
+  opacity:.35; mix-blend-mode: screen;
+}
+@keyframes shimmer { from{ transform: translateX(-20%) } to{ transform: translateX(20%) } }
+
+/* texte interne */
+.badge .txt{ position:relative; z-index:1 }
+
+/* variante “passé” si tu veux l’activer plus tard */
+.badge.past{ opacity:.38; filter:grayscale(.1) }
+
 
 /* Cartes */
 .card{
@@ -315,3 +380,109 @@ footer{margin-top:auto;padding:12px 0;color:var(--muted);text-align:center}
   .player-btn{ width:40px; height:40px }
   .player-btn.primary{ width:48px; height:48px }
 }
+
+/* ===== Ruban centré d’intensités (carrousel) ===== */
+.seg-ribbon{
+  position:relative;
+  height:64px;                /* garde de l’air haut/bas */
+  display:grid; place-items:center;
+  overflow:hidden;
+  margin:10px 0 12px;
+  padding:6px 0;
+}
+.seg-ribbon::before,
+.seg-ribbon::after{
+  content:""; position:absolute; top:0; bottom:0; width:16px; pointer-events:none;
+  /* léger fondu aux bords */
+  background: linear-gradient(to right, rgba(0,0,0,.35), transparent);
+  z-index:2;
+}
+.seg-ribbon::before{ left:0 }
+.seg-ribbon::after{
+  right:0; transform:scaleX(-1);
+}
+
+.seg-track{
+  display:inline-flex; align-items:center; gap:10px;
+  will-change: transform;
+  transition: transform .45s var(--easing);
+}
+
+/* Badge de base (hérite de .badge) */
+.seg-track .badge{
+  position:relative; overflow:hidden;
+  border-radius:999px; padding:8px 14px;
+  line-height:1; white-space:nowrap; user-select:none;
+  border:1px solid var(--card-border);
+  background: color-mix(in oklab, var(--card-bg) 92%, transparent);
+  color:#fff;
+
+  /* état “dim” par défaut, puis on renforce la current */
+  opacity:.65; filter:saturate(.8) brightness(.95);
+  transform: scale(.92);
+  transition:
+    transform .28s var(--easing),
+    opacity .28s var(--easing),
+    filter .28s var(--easing),
+    box-shadow .28s var(--easing),
+    background .28s var(--easing);
+}
+
+/* Couleurs propres à chaque intensité (indépendantes du thème courant) */
+.seg-track .badge[data-seg="L1"]{ --c1:#d17aa6; --c2:#f0c9a6; }
+.seg-track .badge[data-seg="L2"]{ --c1:#c27b57; --c2:#e8b076; }
+.seg-track .badge[data-seg="L3"]{ --c1:#cf6f4f; --c2:#eba759; }
+.seg-track .badge[data-seg="L4"]{ --c1:#cf2b6b; --c2:#ff7ab2; }
+.seg-track .badge[data-seg="L5"]{ --c1:#c2203f; --c2:#ff6b6b; }
+.seg-track .badge[data-seg="SEXE"]{ --c1:#9e3bd6; --c2:#e3b3ff; }
+
+/* past/upcoming (dim) */
+.seg-track .badge.past,
+.seg-track .badge.upcoming{
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--c1) 20%, #000 8%),
+    color-mix(in oklab, var(--c1) 8%, #000 0%)
+  );
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 6px 16px color-mix(in oklab, var(--c1) 12%, transparent);
+}
+
+/* current = zoom + éclat + outline + shimmer */
+.seg-track .badge.current{
+  opacity:1; filter:none; transform: scale(1.12);
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--c1) 50%, #000 10%),
+    color-mix(in oklab, var(--c2) 28%, #000 0%)
+  );
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--c1) 55%, transparent),
+    0 10px 24px color-mix(in oklab, var(--c1) 28%, transparent);
+}
+
+/* remplissage du progrès (piloté en JS via --pct) */
+.seg-track .badge .fill{
+  position:absolute; inset:0 auto 0 0; width:var(--pct, 0%);
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--c2) 65%, #000 0%),
+    color-mix(in oklab, var(--c1) 55%, #000 0%)
+  );
+  opacity:.5; pointer-events:none;
+  transition: width .18s linear, opacity .18s var(--easing);
+}
+.seg-track .badge .txt{ position:relative; z-index:1 }
+
+/* shimmer subtil pour la current */
+.seg-track .badge.current::after{
+  content:""; position:absolute; inset:-150% -60%; pointer-events:none;
+  background: linear-gradient(60deg, transparent 45%, rgba(255,255,255,.28) 50%, transparent 55%);
+  animation: segShimmer 3s var(--easing) infinite;
+  opacity:.35; mix-blend-mode:screen;
+}
+@keyframes segShimmer { from{ transform: translateX(-18%) } to{ transform: translateX(18%) } }
+
+/* 3 badges max visibles sans scroll : on coupe proprement */
+@media (min-width: 0px){
+  .seg-ribbon{ --max-badges:3 }
+}
+
+
+
