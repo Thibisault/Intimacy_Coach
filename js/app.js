@@ -6,6 +6,63 @@ import {SpeechQueue, pickVoices, interruptAndSpeakCNFR} from './tts.js';
 import {enableWakeLock, disableWakeLock} from './wake-lock.js';
 import {buildPlan, drawOne} from './planner.js';
 
+/* ================= Motion helpers ================= */
+const GSAP = typeof window !== 'undefined' ? window.gsap : null;
+const reduceMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const Motion = {
+  heroAnim: null,
+  startHero() {
+    if (reduceMotion || !GSAP) return;
+    const img = document.getElementById('action-image');
+    if (!img) return;
+    GSAP.set(img, { transformOrigin: '50% 50%' });
+    this.heroAnim = GSAP.to(img, {
+      scale: 1.08, xPercent: 2, yPercent: -2,
+      duration: 12, yoyo: true, repeat: -1, ease: 'power1.inOut'
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (!this.heroAnim) return;
+      document.hidden ? this.heroAnim.pause() : this.heroAnim.resume();
+    });
+  },
+  pauseHero(){ this.heroAnim?.pause(); },
+  resumeHero(){ this.heroAnim?.resume(); },
+  killHero(){ this.heroAnim?.kill(); this.heroAnim = null; },
+
+  chipSelect(el){ if (!GSAP || reduceMotion) return; GSAP.from(el, { scale: 0.9, duration: .25, ease: 'back.out(2)' }); },
+
+  sceneIn(){
+    if (!GSAP || reduceMotion) return;
+    const tl = GSAP.timeline();
+    tl.from('#text-fr', { y: 12, opacity: 0, filter: 'blur(4px)', duration: .35, ease: 'power2.out' }, 0)
+      .from('#text-zh', { y: 12, opacity: 0, filter: 'blur(4px)', duration: .35, ease: 'power2.out' }, .08);
+  },
+
+  glow(el){
+    if (!GSAP || reduceMotion) return;
+    GSAP.fromTo(el,
+      { boxShadow: '0 0 0 0 rgba(0,0,0,0)' },
+      { boxShadow: '0 0 32px 0 color-mix(in oklab, var(--ring) 35%, transparent)', duration: .6, ease: 'power2.out' }
+    );
+  },
+
+  progressTo(pct){
+    if (!GSAP || reduceMotion) {
+      document.getElementById('progress-bar').style.width = pct + '%';
+      return;
+    }
+    GSAP.to('#progress-bar', { width: pct + '%', duration: .2, ease: 'power1.out' });
+    const prog = document.querySelector('#progress');
+    prog?.classList.add('flash');
+    // petite impulsion du liseré lumineux
+    const el = prog; if (!el) return;
+    el.style.setProperty('--flash', '1');
+    setTimeout(()=>{ el.style.removeProperty('--flash'); }, 150);
+  }
+};
+
+/* ================= App logic ================= */
 const DEFAULTS = {
   participants:{P1:'Homme', P2:'Femme'},
   sequence:[{segment:'L1',minutes:3},{segment:'L2',minutes:3},{segment:'L3',minutes:3},{segment:'L4',minutes:3},{segment:'L5',minutes:3},{segment:'SEXE',minutes:4}],
@@ -24,6 +81,7 @@ let flatPlan = [];
 let running=false, cancelled=false, paused=false;
 let voices = {zh:null, fr:null};
 const tts = new SpeechQueue();
+
 applyI18n(settings.lang);
 initTabs();
 wireLangButtons();
@@ -31,6 +89,33 @@ initSettingsUI();
 wirePlayUI();
 initDrawTab();
 loadData();
+bootHeroAndSkeleton();
+
+/* ===== Boot: image skeleton & hero animation ===== */
+function bootHeroAndSkeleton(){
+  const visual = document.getElementById('action-visual');
+  const img = document.getElementById('action-image');
+  if (!visual || !img) return;
+
+  // remove skeleton when image decoded, then fade-in
+  img.decode?.().catch(()=>{}).finally(()=>{
+    visual.classList.remove('skeleton');
+    if (GSAP && !reduceMotion) GSAP.from(visual, { opacity: 0, duration:.35, ease:'power1.out' });
+  });
+
+  Motion.startHero();
+
+  // Parallaxe douce au pointeur (fallback simple)
+  const apply = (x,y)=> { if (!GSAP || reduceMotion) return;
+    GSAP.to(img, { xPercent: 2 + x*1.5, yPercent: -2 + y*1.5, duration:.3, overwrite:true });
+  };
+  document.getElementById('action-visual')?.addEventListener('pointermove', e=>{
+    const r=e.currentTarget.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width - .5)*2;
+    const y=((e.clientY-r.top)/r.height - .5)*2;
+    apply(x,y);
+  });
+}
 
 async function loadData(){
   try{
@@ -53,48 +138,41 @@ function initTabs(){
   document.querySelectorAll('.tab').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const currentTab = document.querySelector('.tabs .tab.active')?.dataset.tab;
-      // if leaving Play, auto-pause
       if(currentTab==='play' && running){
-        paused=true;
-        tts.pause();
+        paused=true; tts.pause();
         const toggle = document.getElementById('btn-toggle');
         toggle.textContent = dict[settings.lang]?.resume || 'Reprendre';
         toggle.classList.remove('secondary'); toggle.classList.add('primary');
+        Motion.pauseHero();
       }
-      // activate new tab
       document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      // ...
       const id = btn.dataset.tab;
       document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
       document.getElementById('tab-'+id).classList.add('active');
-      // NEW: fermer tous les accordéons à l'arrivée sur "settings"
       if(id==='settings'){
         document.querySelectorAll('#tab-settings details.accordion').forEach(d=>{ d.open = false; });
       }
-      // entering Draw: ensure voices free to speak
       if(id==='draw'){ try{ tts.cancel(); speechSynthesis.cancel(); speechSynthesis.resume(); }catch{} }
     });
   });
 }
+
 function wireLangButtons(){
   const frBtn = document.getElementById('btn-fr');
   const zhBtn = document.getElementById('btn-zh');
   const setActive=(lang)=>{
     settings.lang=lang; 
     applyI18n(lang); 
-    
     if (typeof window._refreshSequence==='function') window._refreshSequence();
     if (typeof window._refreshAddControls==='function') window._refreshAddControls();
     if (typeof window._refreshRanges==='function') window._refreshRanges();
     if (typeof window._refreshActorButtons==='function') window._refreshActorButtons();
-    
     saveSettings(settings);
     frBtn.classList.toggle('active', lang==='fr');
     zhBtn.classList.toggle('active', lang==='zh');
     if(typeof initDrawTab?.refresh==='function') initDrawTab.refresh();
   };
-  
   frBtn.onclick=()=>setActive('fr');
   zhBtn.onclick=()=>setActive('zh');
 }
@@ -108,22 +186,10 @@ function initSettingsUI(){
     const male = p1.value || 'Homme';
     const female = p2.value || 'Femme';
     if(settings.lang==='zh'){
-      const map = {
-        'random': '随机',
-        'female-male-both': `${female} → ${male} → 互相`,
-        'just-female': `仅${female}`,
-        'just-male': `仅${male}`,
-        'just-both': `仅互相`
-      };
+      const map = {'random':'随机','female-male-both':`${female} → ${male} → 互相`,'just-female':`仅${female}`,'just-male':`仅${male}`,'just-both':`仅互相`};
       return map[mode];
     } else {
-      const map = {
-        'random': 'Aléatoire',
-        'female-male-both': `${female} → ${male} → Mutuelle`,
-        'just-female': `${female} seulement`,
-        'just-male': `${male} seulement`,
-        'just-both': `Mutuelle seulement`
-      };
+      const map = {'random':'Aléatoire','female-male-both':`${female} → ${male} → Mutuelle`,'just-female':`${female} seulement`,'just-male':`${male} seulement`,'just-both':`Mutuelle seulement`};
       return map[mode];
     }
   }
@@ -134,11 +200,12 @@ function initSettingsUI(){
       const b=document.createElement('button');
       b.type='button'; b.className='chip option' + (settings.actorMode===m?' active':'');
       b.textContent = actorLabel(m);
-      b.onclick=()=>{ settings.actorMode=m; drawActorButtons(); saveSettings(settings); };
+      b.onclick=()=>{ settings.actorMode=m; drawActorButtons(); saveSettings(settings); if (GSAP && !reduceMotion) Motion.chipSelect(b); };
       amWrap.appendChild(b);
     });
   }
   drawActorButtons();
+
   // Populate voice selects
   async function fillVoices(){
     await new Promise(res=>{
@@ -165,8 +232,6 @@ function initSettingsUI(){
   }
   fillVoices();
   window._refreshActorButtons = ()=>drawActorButtons();
-
-
 
   document.getElementById('def-anal').checked=settings.filters.anal;
   document.getElementById('def-hard').checked=settings.filters.hard;
@@ -214,9 +279,7 @@ function initSettingsUI(){
       row.addEventListener('dragover', e=>{
         e.preventDefault();
         const overIdx = parseInt(row.dataset.index,10);
-        if(overIdx!==dragIndex){
-          row.classList.add('drop-target');
-        }
+        if(overIdx!==dragIndex){ row.classList.add('drop-target'); }
       });
       row.addEventListener('dragleave', ()=>row.classList.remove('drop-target'));
       row.addEventListener('drop', ()=>{
@@ -233,33 +296,32 @@ function initSettingsUI(){
       seqList.appendChild(row);
     });
 
-    window._refreshSequence = redrawSequence; // expose pour i18n refresh
+    window._refreshSequence = redrawSequence;
   }
   redrawSequence();
 
-// --- Ajout d'une intensité via chips ---
-const addChipsCont = document.getElementById('add-seg-chips');
-let addSegCurrent = 'L1';
+  // --- Ajout d'une intensité via chips ---
+  const addChipsCont = document.getElementById('add-seg-chips');
+  let addSegCurrent = 'L1';
+  function redrawAddControls(){
+    addChipsCont.innerHTML='';
+    ['L1','L2','L3','L4','L5','SEXE'].forEach(seg=>{
+      const b=document.createElement('button');
+      const cls = seg==='SEXE' ? 'sexe' : ('level'+parseInt(seg.replace('L',''),10));
+      b.className = `intensity-chip ${cls}` + (addSegCurrent===seg?' active':'');
+      b.textContent = getIntensityName(seg, settings.lang);
+      b.onclick=()=>{ addSegCurrent=seg; redrawAddControls(); if (GSAP && !reduceMotion) Motion.chipSelect(b); };
+      addChipsCont.appendChild(b);
+    });
+  }
+  redrawAddControls();
+  window._refreshAddControls = redrawAddControls;
 
-function redrawAddControls(){
-  addChipsCont.innerHTML='';
-  ['L1','L2','L3','L4','L5','SEXE'].forEach(seg=>{
-    const b=document.createElement('button');
-    const cls = seg==='SEXE' ? 'sexe' : ('level'+parseInt(seg.replace('L',''),10));
-    b.className = `intensity-chip ${cls}` + (addSegCurrent===seg?' active':'');
-    b.textContent = getIntensityName(seg, settings.lang);
-    b.onclick=()=>{ addSegCurrent=seg; redrawAddControls(); };
-    addChipsCont.appendChild(b);
-  });
-}
-redrawAddControls();
-window._refreshAddControls = redrawAddControls;
-
-document.getElementById('btn-add-step').onclick=()=>{
-  const minutes=parseInt(document.getElementById('inp-add-min').value,10)||3;
-  settings.sequence.push({segment:addSegCurrent, minutes});
-  redrawSequence(); saveSettings(settings);
-};
+  document.getElementById('btn-add-step').onclick=()=>{
+    const minutes=parseInt(document.getElementById('inp-add-min').value,10)||3;
+    settings.sequence.push({segment:addSegCurrent, minutes});
+    redrawSequence(); saveSettings(settings);
+  };
 
   const rg=document.querySelector('.ranges-grid');
   function redrawRanges(){
@@ -311,33 +373,33 @@ document.getElementById('btn-add-step').onclick=()=>{
     saveSettings(settings);
     refreshPlan();
     drawActorButtons();
-  // Populate voice selects
-  async function fillVoices(){
-    await new Promise(res=>{
-      const v = speechSynthesis.getVoices(); if(v?.length) return res();
-      speechSynthesis.onvoiceschanged = ()=>res();
-      speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
-      setTimeout(res, 400);
-    });
-    const vs = speechSynthesis.getVoices()||[];
-    const frSel = document.getElementById('sel-voice-fr');
-    const zhSel = document.getElementById('sel-voice-zh');
-    function fill(sel, pref, langPrefix){
-      sel.innerHTML='';
-      const opt0=document.createElement('option'); opt0.value=''; opt0.textContent='Auto'; sel.appendChild(opt0);
-      vs.filter(v=> (v.lang||'').toLowerCase().startsWith(langPrefix)).forEach(v=>{
-        const o=document.createElement('option'); o.value=v.voiceURI||v.name; o.textContent=`${v.name} (${v.lang})`; sel.appendChild(o);
-      });
-      sel.value = pref || '';
-    }
-    fill(frSel, settings.voicePrefs?.fr||'', 'fr');
-    fill(zhSel, settings.voicePrefs?.zh||'', 'zh');
-    frSel.onchange=()=>{ settings.voicePrefs.fr = frSel.value || null; saveSettings(settings); };
-    zhSel.onchange=()=>{ settings.voicePrefs.zh = zhSel.value || null; saveSettings(settings); };
-  }
-  fillVoices();
 
+    // repopulate voices after save (original code retained)
+    (async function fillVoices(){
+      await new Promise(res=>{
+        const v = speechSynthesis.getVoices(); if(v?.length) return res();
+        speechSynthesis.onvoiceschanged = ()=>res();
+        speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
+        setTimeout(res, 400);
+      });
+      const vs = speechSynthesis.getVoices()||[];
+      const frSel = document.getElementById('sel-voice-fr');
+      const zhSel = document.getElementById('sel-voice-zh');
+      function fill(sel, pref, langPrefix){
+        sel.innerHTML='';
+        const opt0=document.createElement('option'); opt0.value=''; opt0.textContent='Auto'; sel.appendChild(opt0);
+        vs.filter(v=> (v.lang||'').toLowerCase().startsWith(langPrefix)).forEach(v=>{
+          const o=document.createElement('option'); o.value=v.voiceURI||v.name; o.textContent=`${v.name} (${v.lang})`; sel.appendChild(o);
+        });
+        sel.value = pref || '';
+      }
+      fill(frSel, settings.voicePrefs?.fr||'', 'fr');
+      fill(zhSel, settings.voicePrefs?.zh||'', 'zh');
+      frSel.onchange=()=>{ settings.voicePrefs.fr = frSel.value || null; saveSettings(settings); };
+      zhSel.onchange=()=>{ settings.voicePrefs.zh = zhSel.value || null; saveSettings(settings); };
+    })();
   };
+
   document.getElementById('btn-reset').onclick=()=>{
     settings = JSON.parse(JSON.stringify(DEFAULTS));
     saveSettings(settings); location.reload();
@@ -354,11 +416,19 @@ document.getElementById('btn-add-step').onclick=()=>{
 
   document.getElementById('btn-test-voices').onclick=async()=>{
     await ensureVoices();
+    showTTS(true);
     tts.enqueueCNFR('这是中文测试。', 'Ceci est un test français.', voices);
+    // masquage indicateur après un court délai
+    setTimeout(()=>showTTS(false), 1500);
   };
 }
 
 function wirePlayUI(){
+  ["btn-start","btn-toggle","btn-stop"].forEach(id=>{
+    const el=document.getElementById(id);
+    el?.addEventListener('click', ()=> { if (GSAP && !reduceMotion) GSAP.fromTo(el,{y:0},{y:-2,duration:.08,yoyo:true,repeat:1,ease:"power1.out"}); });
+  });
+
   document.getElementById('btn-start').onclick=()=>{ tts.cancel(); startSession(); };
   document.getElementById('btn-toggle').onclick=()=>togglePauseResume();
   document.getElementById('btn-stop').onclick=()=>{ tts.cancel(); stopSession(); };
@@ -388,21 +458,25 @@ function setTheme(seg){
   document.body.setAttribute('data-intensity', seg);
   const name = getIntensityName(seg, settings.lang);
   document.getElementById('badge-segment').textContent = name;
+  Motion.glow(card);
 }
 
-function updateActorBadge(actor){ /* hidden in minimal UI, kept for potential future */ }
+function updateActorBadge(actor){ /* kept for potential future */ }
 
 function setActionTexts(fr, zh){
   document.getElementById('text-fr').textContent = fr||'—';
   document.getElementById('text-zh').textContent = zh||'—';
+  Motion.sceneIn();
 }
 
 function setTimer(left, total){
   document.getElementById('time-left').textContent = formatMMSS(left);
   document.getElementById('time-total').textContent = formatMMSS(total);
   const pct = total? ((total-left)/total)*100 : 0;
-  document.getElementById('progress-bar').style.width = pct.toFixed(2)+'%';
+  Motion.progressTo(+pct.toFixed(2));
 }
+
+function showTTS(show){ const ind=document.getElementById('tts-ind'); if (ind) ind.style.visibility = show ? 'visible' : 'hidden'; }
 
 async function accurateCountdown(totalSec){
   const base = performance.now();
@@ -410,7 +484,6 @@ async function accurateCountdown(totalSec){
     if(cancelled) return;
     while(paused){ await sleep(120); if(cancelled) return; }
     setTimer(left, totalSec);
-    if(left<=3 && left>0){ const tone = left===3? 440 : left===2? 660 : 880; }
     if(left>0){
       const target = base + (totalSec - (left-1))*1000;
       const wait = Math.max(0, target - performance.now());
@@ -430,6 +503,7 @@ async function startSession(){
   document.getElementById('btn-stop').disabled=false;
   document.getElementById('btn-toggle').textContent = dict[settings.lang]?.pause || 'Pause';
   startAudioKeepAlive();
+  Motion.resumeHero(); // s'assure que l'anim tourne
 
   for(const seg of currentPlan){
     if(cancelled) break;
@@ -439,9 +513,10 @@ async function startSession(){
       if(cancelled) break;
       tts.cancel();
       setActionTexts(act.text, act.text_zh);
+      showTTS(true);
       interruptAndSpeakCNFR(tts, act.text_zh, act.text, voices);
-      if(cancelled) break;
       await accurateCountdown(act.duration);
+      showTTS(false);
       if(cancelled) break;
       settings.cooldownSec=1;
       if(settings.cooldownSec>0){
@@ -456,8 +531,15 @@ async function startSession(){
 function togglePauseResume(){
   if(!running) return;
   const btn = document.getElementById('btn-toggle');
-  if(!paused){ paused=true; tts.pause(); btn.textContent = dict[settings.lang]?.resume || 'Reprendre'; btn.classList.remove('secondary'); btn.classList.add('primary'); }
-  else { paused=false; tts.resume(); btn.textContent = dict[settings.lang]?.pause || 'Pause'; btn.classList.remove('primary'); btn.classList.add('secondary'); }
+  if(!paused){
+    paused=true; tts.pause(); Motion.pauseHero();
+    btn.textContent = dict[settings.lang]?.resume || 'Reprendre';
+    btn.classList.remove('secondary'); btn.classList.add('primary');
+  } else {
+    paused=false; tts.resume(); Motion.resumeHero();
+    btn.textContent = dict[settings.lang]?.pause || 'Pause';
+    btn.classList.remove('primary'); btn.classList.add('secondary');
+  }
 }
 
 function stopSession(){
@@ -468,10 +550,12 @@ function stopSession(){
   document.getElementById('btn-toggle').disabled=true;
   document.getElementById('btn-stop').disabled=true;
   setActionTexts('—','—'); setTimer(0,0);
+  showTTS(false);
   stopAudioKeepAlive(); disableWakeLock();
+  // on laisse l'anim héro tourner en fond; sinon: Motion.pauseHero();
 }
 
-// ---- Draw Tab v2 ----
+/* ---- Draw Tab v2 ---- */
 function initDrawTab(){
   const cont = document.getElementById('draw-intensity-chips');
   const segs = ['L1','L2','L3','L4','L5','SEXE'];
@@ -483,7 +567,7 @@ function initDrawTab(){
       const cls = seg==='SEXE'?'sexe':('level'+parseInt(seg.replace('L',''),10));
       b.className = `intensity-chip ${cls}` + (current===seg?' active':'');
       b.textContent = getIntensityName(seg, settings.lang);
-      b.onclick=()=>{ current=seg; document.body.setAttribute('data-intensity', seg); drawChips(); };
+      b.onclick=()=>{ current=seg; document.body.setAttribute('data-intensity', seg); drawChips(); if (GSAP && !reduceMotion) Motion.chipSelect(b); };
       cont.appendChild(b);
     });
   }
@@ -499,6 +583,6 @@ function initDrawTab(){
     card.classList.add(themeClass(current));
     document.getElementById('draw-fr').textContent = pick? pick.text : '—';
     document.getElementById('draw-zh').textContent = pick? (pick.text_zh||'—') : '—';
-    if(pick){ interruptAndSpeakCNFR(tts, pick.text_zh, pick.text, voices); }
+    if(pick){ showTTS(true); interruptAndSpeakCNFR(tts, pick.text_zh, pick.text, voices); setTimeout(()=>showTTS(false), 1500); }
   };
 }

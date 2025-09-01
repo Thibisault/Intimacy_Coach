@@ -6,6 +6,8 @@
     <meta name="theme-color" content="#111827" />
     <title>Intimacy Coach</title>
     <meta name="description" content="Séquences érotiques guidées FR + CN avec voix et compte à rebours." />
+
+    <!-- PWA -->
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./favicon.ico">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
@@ -15,6 +17,7 @@
     <!-- Polices -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
+    <!-- Styles -->
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -36,8 +39,7 @@
 
         <!-- PLAY -->
         <section id="tab-play" class="tabpanel active">
-
-          <!-- NOUVELLE BARRE HAUTE : statut + veille -->
+          <!-- Barre haute : statut + veille -->
           <div class="topbar">
             <div class="status">
               <div class="badges">
@@ -45,8 +47,8 @@
               </div>
             </div>
 
-            <div class="keep-awake" title="Empêche l’écran de s’éteindre pendant la session">
-              <label class="switch">
+            <div class="keep-awake" title="Autorise l’écran à s’éteindre pendant la session">
+              <label class="switch" aria-label="Veille">
                 <input type="checkbox" id="keep-awake">
                 <span class="slider"></span>
               </label>
@@ -54,17 +56,24 @@
             </div>
           </div>
 
-          <!-- Carte d’action : visuel carré + séparateur + timer -->
+          <!-- Carte d’action -->
           <div id="action-card" class="card theme-level1">
-            <div id="action-visual" aria-label="Cadre texte sur image">
+            <div id="action-visual" class="skeleton" aria-label="Cadre texte sur image">
+              <!-- Image animée -->
+              <img id="action-image" src="./test.png" alt="" />
+              <!-- Voile géré via ::before en CSS -->
+
+              <!-- Texte par-dessus -->
               <div class="action-overlay">
                 <div class="action-text zh" id="text-zh">—</div>
                 <div class="action-text fr" id="text-fr">—</div>
               </div>
             </div>
 
+            <!-- Séparateur -->
             <div class="divider" role="separator" aria-hidden="true"></div>
 
+            <!-- Timer -->
             <div class="timer">
               <div id="progress" class="progress"><div id="progress-bar"></div></div>
               <div class="time-row">
@@ -72,6 +81,9 @@
                 <span id="time-total">00:00</span>
               </div>
             </div>
+
+            <!-- Indicateur TTS -->
+            <div id="tts-ind" aria-hidden="true"><span></span><span></span><span></span></div>
           </div>
 
           <div class="controls">
@@ -79,8 +91,6 @@
             <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
             <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
           </div>
-
-          <!-- (ancienne hint-row supprimée) -->
         </section>
 
         <!-- SETTINGS -->
@@ -176,7 +186,10 @@
       </footer>
     </div>
 
-    <!-- JS -->
+    <!-- GSAP (CDN global) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+    <!-- JS modules -->
     <script type="module" src="./js/i18n.js"></script>
     <script type="module" src="./js/util.js"></script>
     <script type="module" src="./js/storage.js"></script>
@@ -185,6 +198,7 @@
     <script type="module" src="./js/wake-lock.js"></script>
     <script type="module" src="./js/planner.js"></script>
     <script type="module" src="./js/app.js"></script>
+
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {

@@ -2,7 +2,7 @@
 :root {
   --bg:#0b0f17; --fg:#e5e7eb; --muted:#9ca3af; --card:#111827; --accent:#6ee7b7; --danger:#ef4444; --warn:#f59e0b;
   --level1:#60a5fa; --level2:#34d399; --level3:#fbbf24; --level4:#f472b6; --level5:#f87171; --sexe:#a78bfa;
-  --overlay: rgba(0,0,0,0.35); /* voile par-dessus l'image pour la lisibilité */
+  --overlay: rgba(0,0,0,0.35);
 }
 
 *{box-sizing:border-box}
@@ -21,9 +21,12 @@ body{
 .lang-toggle .chip{background:#1f2937;color:#fff;border:none;border-radius:999px;padding:6px 10px;margin-left:6px;opacity:.7}
 .lang-toggle .chip.active{opacity:1;outline:2px solid var(--accent)}
 
-.tabs{display:flex;gap:8px;margin:8px 0 12px}
-.tab{flex:1;background:#1f2937;color:#fff;border:none;padding:10px;border-radius:10px}
-.tab.active{outline:2px solid var(--accent)}
+/* Tabs + underline animé */
+.tabs{display:flex;gap:8px;margin:8px 0 12px; position:relative}
+.tab{flex:1;background:#1f2937;color:#fff;border:none;padding:10px;border-radius:10px; position:relative}
+.tab::after{content:"";position:absolute;left:10%;right:10%;bottom:-2px;height:2px;
+  background:linear-gradient(90deg,#6ee7b7,#60a5fa);opacity:0;transform:scaleX(.6);transition:.25s}
+.tab.active::after{opacity:1;transform:scaleX(1)}
 
 .tabpanel{display:none}
 .tabpanel.active{display:block}
@@ -41,32 +44,48 @@ body{
 }
 
 /* ========== ACTION CARD ========== */
-/* 1) Cadre visuel carré pour une image 1024x1024 (s’adapte en responsive) */
-#action-card{ padding:18px; position:relative; }
+#action-card{ padding:18px; position:relative; transition: box-shadow .4s ease }
+
 #action-visual{
   position:relative;
   width:100%;
-  aspect-ratio:1 / 1;                 /* carré parfait */
-  background:url("./test.png") center/contain no-repeat var(--card); /* image entière (contain) */
+  aspect-ratio:1 / 1;         /* carré parfait */
   border-radius:12px;
   overflow:hidden;
 }
+
+/* Skeleton shimmer au chargement */
+.skeleton{ position:relative; overflow:hidden; background:#0b0f17 }
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
+  animation: shimmer 1.1s infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+
+/* Voile au-dessus de l'image animée */
 #action-visual::before{
   content:"";
   position:absolute; inset:0;
-  background:var(--overlay);          /* voile sombre pour le texte */
-  z-index:0;
+  background:var(--overlay);
+  z-index: 2;
 }
 
-/* 2) Texte centré par-dessus l’image */
+/* Image animée (pilotée par GSAP) */
+#action-image{
+  position:absolute; inset:0;
+  width:110%; height:110%;    /* débord pour pan sans bord visible */
+  left:-5%; top:-5%;
+  object-fit:cover;
+  z-index:1;
+  will-change: transform;
+}
+
+/* Texte au-dessus */
 .action-overlay{
-  position:absolute; inset:0; z-index:1;
+  position:absolute; inset:0; z-index:3;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:10px; padding:12px; text-align:center;
 }
-.action-text{
-  line-height:1.3; margin:0; word-break:break-word;
-}
+.action-text{ line-height:1.3; margin:0; word-break:break-word; }
 .action-text.zh{
   font-family:"Playfair Display", serif;
   font-size:1.6rem; font-weight:600; color:#fefefe;
@@ -81,19 +100,28 @@ body{
   padding:6px 12px; border-radius:10px;
 }
 
-/* 3) Séparateur net entre le cadre et le timer */
+/* Séparateur + Timer */
 .divider{
   height:1px; margin:14px 2px 10px;
   background:linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
   border-radius:999px;
 }
-
-/* 4) Timer sous le cadre, bien séparé */
 .timer{ margin-top:0 }
-.progress{height:10px;background:#0b0f17;border-radius:999px;overflow:hidden;border:1px solid #1f2937}
-#progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#6ee7b7,#60a5fa);transition:width .15s linear}
+.progress{height:10px;background:#0b0f17;border-radius:999px;overflow:hidden;border:1px solid #1f2937; position:relative}
+#progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#6ee7b7,#60a5fa)}
+/* liseré lumineux */
+.progress::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  mix-blend-mode:screen;opacity:.0;transition:.2s}
 .time-row{display:flex;justify-content:space-between;margin-top:6px;color:var(--muted);font-variant-numeric:tabular-nums}
 .time-row span{background:rgba(0,0,0,0.18); padding:2px 8px; border-radius:8px}
+
+/* Indicateur TTS */
+#tts-ind{display:flex;gap:6px;justify-content:center;margin-top:8px;opacity:.65;visibility:hidden}
+#tts-ind span{width:6px;height:6px;background:#6ee7b7;border-radius:50%;
+  animation: breathe 1.2s ease-in-out infinite}
+#tts-ind span:nth-child(2){animation-delay:.2s} #tts-ind span:nth-child(3){animation-delay:.4s}
+@keyframes breathe{0%,100%{transform:scale(.8)}50%{transform:scale(1.25)}}
 
 /* ========== Divers UI existants ========== */
 .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
@@ -144,13 +172,14 @@ body[data-intensity="L4"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(24
 body[data-intensity="L5"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(248,113,113,0.12) 100%)}
 body[data-intensity="SEXE"]{background:linear-gradient(180deg, #0b0f17 0%, rgba(167,139,250,0.12) 100%)}
 
+/* Chips + halo */
 .chip-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .mode-buttons{display:flex;gap:8px;flex-wrap:wrap}
 .chip{background:#1f2937;color:#fff;border:none;border-radius:999px;padding:8px 12px}
 .chip.option{opacity:.85}
 .chip.option.active{opacity:1; outline:2px solid var(--accent)}
-.intensity-chip{border-radius:999px; padding:8px 12px; border:1px solid #1f2937; background:#0b0f17}
-.intensity-chip.active{outline:2px solid var(--accent)}
+.intensity-chip{border-radius:999px; padding:8px 12px; border:1px solid #1f2937; background:#0b0f17; transition: box-shadow .3s}
+.intensity-chip.active{outline:2px solid var(--accent); box-shadow:0 0 0 6px rgba(110,231,183,.15)}
 .intensity-chip.level1{color:#60a5fa}
 .intensity-chip.level2{color:#34d399}
 .intensity-chip.level3{color:#fbbf24}
@@ -170,6 +199,7 @@ footer{margin-top:auto;padding:12px 0;color:var(--muted);text-align:center}
 
 button.tiny{min-width:auto;padding:6px 8px;border-radius:8px}
 
+/* Séquence: drag & drop */
 .sequence-list .row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;background:#1f2937;border-radius:12px;padding:8px}
 .drag-handle{cursor:grab;font-size:1.1rem;opacity:.8}
 .dragging{opacity:.6}
@@ -200,3 +230,7 @@ button.tiny{min-width:auto;padding:6px 8px;border-radius:8px}
   user-select:none;
 }
 
+/* Accessibilité : désactiver l’anim si l’utilisateur préfère moins d’animations */
+@media (prefers-reduced-motion: reduce){
+  #action-image{ animation: none !important; transform: none !important; }
+}
