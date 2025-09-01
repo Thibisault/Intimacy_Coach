@@ -1,4 +1,4 @@
-// app.js — lecteur fiable (Start/Pause/Stop + Prev/Skip/Next-segment) + autosave + draw
+// app.js — lecteur fiable (Start/Pause/Stop + Prev/Skip/Next-segment) + autosave + draw + illustrations
 import { applyI18n, dict, getIntensityName } from './i18n.js';
 import { sleep, formatMMSS, themeClass } from './util.js';
 import { loadSettings, saveSettings } from './storage.js';
@@ -31,7 +31,7 @@ const DEFAULTS = {
 
 let settings = Object.assign({}, DEFAULTS, loadSettings() || {});
 let data = null;
-let currentPlan = [];            // Array< Array<Action> > ; each Action: {text, text_zh, duration, segment}
+let currentPlan = []; // Array<Array<Action>>
 let running = false, paused = false, cancelled = false;
 let voices = { zh:null, fr:null };
 let uiState = 'idle';            // 'idle' | 'running' | 'paused'
@@ -46,6 +46,49 @@ let currentLeft = 0;
 // Commandes utilisateur (déclenchées par UI)
 const control = { request: null }; // 'skip_action' | 'prev_action' | 'next_segment' | 'stop_session' | 'restart_action'
 
+/* ---------- Illustrations helpers (NOUVEAU) ---------- */
+
+// image par défaut (celle déjà utilisée par --visual-bg dans ton CSS)
+const DEFAULT_VISUAL = './test.webp';
+
+/** Résout un spec "image" en URL utilisable.
+ *  - "Position-levrette.webp"  -> "./public/illustrations/positions/Position-levrette.webp"
+ *  - "levrette"                -> "./public/illustrations/positions/levrette.webp"
+ *  - "./public/…/X.webp"       -> inchangé (chemin absolu/relatif déjà fourni)
+ */
+function resolveImageUrl(spec) {
+  if (!spec || typeof spec !== 'string') return null;
+  const trimmed = spec.trim();
+  if (trimmed.startsWith('.') || trimmed.startsWith('/')) return trimmed;
+  // ajoute extension si absente
+  const hasExt = /\.(webp|png|jpg|jpeg|avif)$/i.test(trimmed);
+  const file = hasExt ? trimmed : `${trimmed}.webp`;
+  return `./public/illustrations/positions/${file}`;
+}
+
+/** Applique une image au bloc visuel (met à jour la CSS var --visual-bg) */
+function setVisualImage(url, targetId) {
+  const el = document.getElementById(targetId);
+  if (!el || !url) return;
+  const u = encodeURI(url);
+  el.style.setProperty('--visual-bg', `url("${u}")`);
+  // préchargement léger
+  const img = new Image();
+  img.src = u;
+}
+
+/** Cherche une image sur un objet action (plusieurs alias possibles) */
+function getImageSpecFromAction(act) {
+  return act?.image ?? act?.illustration ?? act?.img ?? act?.picture ?? null;
+}
+
+/** Applique l'image d'une action si disponible (sinon ne touche à rien) */
+function updateVisualFromAction(act, targetId) {
+  const spec = getImageSpecFromAction(act);
+  const url  = resolveImageUrl(spec);
+  if (url) setVisualImage(url, targetId);
+}
+
 /* ---------- Boot ---------- */
 applyI18n(settings.lang);
 initTabs();
@@ -54,11 +97,13 @@ initSettingsUI();
 wirePlayUI();
 initDrawTab();
 loadData();
+wireVisibilityPause();
 
 /* ---------- Data ---------- */
 async function loadData(){
   try{
     const res = await fetch('./public/data.json?' + Date.now());
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
     data = await res.json();
   }catch(e){
     console.error('Failed to load data.json', e);
@@ -73,30 +118,44 @@ function refreshPlan(){
 
 /* ---------- Tabs / Navigation ---------- */
 function initTabs(){
-  document.querySelectorAll('.tab').forEach(btn=>{
+  const tabButtons = document.querySelectorAll('.tabs .tab');
+  const panels = document.querySelectorAll('.tabpanel');
+
+  const setActiveTab = (id) => {
+    tabButtons.forEach(b => {
+      const active = b.dataset.tab === id;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', String(active));
+    });
+    panels.forEach(p => {
+      const active = p.id === 'tab-' + id;
+      p.classList.toggle('active', active);
+      p.setAttribute('aria-hidden', String(!active));
+    });
+  };
+
+  tabButtons.forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const currentTab = document.querySelector('.tabs .tab.active')?.dataset.tab;
+      const nextTab = btn.dataset.tab;
 
-      // Quitter Play => autopause
-      if(currentTab === 'play' && running){
+      // Quitter Play => autopause (et coupe TTS)
+      if(currentTab === 'play' && nextTab !== 'play' && running){
         pauseSession();
       }
+      if(nextTab !== 'play'){ try { tts.cancel(); speechSynthesis.cancel(); } catch {} }
 
-      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
+      setActiveTab(nextTab);
 
-      const id = btn.dataset.tab;
-      document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
-      document.getElementById('tab-' + id).classList.add('active');
-
-      if(id === 'settings'){
+      // Sur "settings": fermer les accordéons par défaut
+      if(nextTab === 'settings'){
         document.querySelectorAll('#tab-settings details.accordion').forEach(d => d.open = false);
-      }
-      if(id === 'draw'){
-        try { tts.cancel(); speechSynthesis.cancel(); speechSynthesis.resume(); } catch {}
       }
     });
   });
+
+  // état initial
+  setActiveTab(document.querySelector('.tabs .tab.active')?.dataset.tab || 'play');
 }
 
 /* ---------- Lang ---------- */
@@ -108,11 +167,12 @@ function wireLangButtons(){
     settings.lang = lang;
     applyI18n(lang);
 
-    if (typeof window._refreshSequence === 'function') window._refreshSequence();
-    if (typeof window._refreshAddControls === 'function') window._refreshAddControls();
-    if (typeof window._refreshRanges === 'function') window._refreshRanges();
-    if (typeof window._refreshActorButtons === 'function') window._refreshActorButtons();
-    if (typeof initDrawTab?.refresh === 'function') initDrawTab.refresh();
+    // Rafraîchir les zones construites dynamiquement
+    window._refreshSequence?.();
+    window._refreshAddControls?.();
+    window._refreshRanges?.();
+    window._refreshActorButtons?.();
+    initDrawTab.refresh?.();
 
     saveSettings(settings);
     frBtn.classList.toggle('active', lang === 'fr');
@@ -127,23 +187,23 @@ function wireLangButtons(){
 function initSettingsUI(){
   const p1 = document.getElementById('inp-p1');
   const p2 = document.getElementById('inp-p2');
-  p1.value = settings.participants.P1;
-  p2.value = settings.participants.P2;
+  if (p1) p1.value = settings.participants.P1;
+  if (p2) p2.value = settings.participants.P2;
 
   const commitNames = () => {
-    settings.participants.P1 = p1.value || 'Homme';
-    settings.participants.P2 = p2.value || 'Femme';
+    settings.participants.P1 = (p1?.value || 'Homme').trim() || 'Homme';
+    settings.participants.P2 = (p2?.value || 'Femme').trim() || 'Femme';
     saveSettings(settings);
-    if (typeof window._refreshActorButtons === 'function') window._refreshActorButtons();
+    window._refreshActorButtons?.();
   };
-  p1.addEventListener('input', commitNames);
-  p2.addEventListener('input', commitNames);
+  p1?.addEventListener('input', commitNames);
+  p2?.addEventListener('input', commitNames);
 
   // Actor mode
   const amWrap = document.getElementById('actor-mode-buttons');
   function actorLabel(mode){
-    const male = p1.value || 'Homme';
-    const female = p2.value || 'Femme';
+    const male = p1?.value || 'Homme';
+    const female = p2?.value || 'Femme';
     if(settings.lang === 'zh'){
       return ({
         'random': '随机',
@@ -162,6 +222,7 @@ function initSettingsUI(){
     })[mode];
   }
   function drawActorButtons(){
+    if(!amWrap) return;
     amWrap.innerHTML = '';
     ['random','female-male-both','just-female','just-male','just-both'].forEach(m=>{
       const b = document.createElement('button');
@@ -181,13 +242,15 @@ function initSettingsUI(){
       const v = speechSynthesis.getVoices();
       if(v?.length) return res();
       speechSynthesis.onvoiceschanged = ()=>res();
-      speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
+      // nudge Safari/iOS
+      try { speechSynthesis.speak(new SpeechSynthesisUtterance(' ')); } catch {}
       setTimeout(res, 400);
     });
     const vs = speechSynthesis.getVoices() || [];
     const frSel = document.getElementById('sel-voice-fr');
     const zhSel = document.getElementById('sel-voice-zh');
     function fill(sel, pref, langPrefix){
+      if(!sel) return;
       sel.innerHTML = '';
       const opt0 = document.createElement('option');
       opt0.value = ''; opt0.textContent = 'Auto';
@@ -203,30 +266,34 @@ function initSettingsUI(){
     }
     fill(frSel, settings.voicePrefs?.fr || '', 'fr');
     fill(zhSel, settings.voicePrefs?.zh || '', 'zh');
-    frSel.onchange = ()=>{ settings.voicePrefs.fr = frSel.value || null; saveSettings(settings); };
-    zhSel.onchange = ()=>{ settings.voicePrefs.zh = zhSel.value || null; saveSettings(settings); };
+    frSel && (frSel.onchange = ()=>{ settings.voicePrefs.fr = frSel.value || null; saveSettings(settings); });
+    zhSel && (zhSel.onchange = ()=>{ settings.voicePrefs.zh = zhSel.value || null; saveSettings(settings); });
   }
   fillVoices();
 
   // Filters (autosave)
   const syncFilters = () => {
     settings.filters = {
-      anal: document.getElementById('def-anal').checked,
-      hard: document.getElementById('def-hard').checked,
-      clothed: document.getElementById('def-clothed').checked,
+      anal: document.getElementById('def-anal')?.checked ?? true,
+      hard: document.getElementById('def-hard')?.checked ?? true,
+      clothed: document.getElementById('def-clothed')?.checked ?? true,
     };
     saveSettings(settings);
   };
-  document.getElementById('def-anal').checked    = settings.filters.anal;
-  document.getElementById('def-hard').checked    = settings.filters.hard;
-  document.getElementById('def-clothed').checked = settings.filters.clothed;
-  document.getElementById('def-anal').addEventListener('change', syncFilters);
-  document.getElementById('def-hard').addEventListener('change', syncFilters);
-  document.getElementById('def-clothed').addEventListener('change', syncFilters);
+  const chkAnal = document.getElementById('def-anal');
+  const chkHard = document.getElementById('def-hard');
+  const chkClothed = document.getElementById('def-clothed');
+  if(chkAnal) chkAnal.checked = !!settings.filters.anal;
+  if(chkHard) chkHard.checked = !!settings.filters.hard;
+  if(chkClothed) chkClothed.checked = !!settings.filters.clothed;
+  chkAnal?.addEventListener('change', syncFilters);
+  chkHard?.addEventListener('change', syncFilters);
+  chkClothed?.addEventListener('change', syncFilters);
 
   // Sequence editor
   const seqList = document.getElementById('sequence-list');
   function redrawSequence(){
+    if(!seqList) return;
     seqList.innerHTML = '';
     let dragIndex = null;
 
@@ -254,6 +321,7 @@ function initSettingsUI(){
       minutesWrap.append(min,affix);
 
       const del = document.createElement('button');
+      del.type = 'button';
       del.textContent = '✕';
       del.className = 'danger tiny';
 
@@ -290,10 +358,12 @@ function initSettingsUI(){
   const addChipsCont = document.getElementById('add-seg-chips');
   let addSegCurrent = 'L1';
   function redrawAddControls(){
+    if(!addChipsCont) return;
     addChipsCont.innerHTML = '';
     ['L1','L2','L3','L4','L5','SEXE'].forEach(seg=>{
       const b = document.createElement('button');
       const cls = seg==='SEXE' ? 'sexe' : ('level'+parseInt(seg.replace('L',''),10));
+      b.type = 'button';
       b.className = `intensity-chip ${cls}` + (addSegCurrent===seg?' active':'');
       b.textContent = getIntensityName(seg, settings.lang);
       b.onclick = ()=>{ addSegCurrent = seg; redrawAddControls(); };
@@ -303,15 +373,16 @@ function initSettingsUI(){
   redrawAddControls();
   window._refreshAddControls = redrawAddControls;
 
-  document.getElementById('btn-add-step').onclick = ()=>{
-    const minutes = parseInt(document.getElementById('inp-add-min').value,10) || 3;
+  document.getElementById('btn-add-step')?.addEventListener('click', ()=>{
+    const minutes = parseInt(document.getElementById('inp-add-min')?.value,10) || 3;
     settings.sequence.push({ segment:addSegCurrent, minutes });
     redrawSequence(); saveSettings(settings);
-  };
+  });
 
   // Ranges
   const rg = document.querySelector('.ranges-grid');
   function redrawRanges(){
+    if(!rg) return;
     rg.innerHTML = '';
     const unitS  = dict[settings.lang]?.unit_s || 's';
     const minTxt = dict[settings.lang]?.min_label || 'min';
@@ -348,10 +419,10 @@ function initSettingsUI(){
   redrawRanges();
 
   // Test voix
-  document.getElementById('btn-test-voices').onclick = async ()=>{
+  document.getElementById('btn-test-voices')?.addEventListener('click', async ()=>{
     await ensureVoices();
     tts.enqueueCNFR('这是中文测试。', 'Ceci est un test français.', voices);
-  };
+  });
 }
 
 /* ---------- Play Controls ---------- */
@@ -365,28 +436,18 @@ function wirePlayUI(){
 
   setUIState('idle');
 
-  startBtn.onclick = () => {
+  startBtn?.addEventListener('click', () => {
     if (paused && running) { resumeSession(); return; }
     tts.cancel(); startSession();
-  };
-  pauseBtn.onclick = () => { pauseSession(); };
-  stopBtn.onclick  = () => { control.request = 'stop_session'; tts.cancel(); stopSession(); };
+  });
+  pauseBtn?.addEventListener('click', () => { pauseSession(); });
+  stopBtn?.addEventListener('click',  () => { control.request = 'stop_session'; tts.cancel(); stopSession(); });
 
-  // Nouveaux contrôles fonctionnels
-  prevBtn.onclick = () => {
-    if (!running) return;
-    control.request = 'prev_action';
-  };
-  skipBtn.onclick = () => {
-    if (!running) return;
-    control.request = 'skip_action';
-  };
-  nextBtn.onclick = () => {
-    if (!running) return;
-    control.request = 'next_segment';
-  };
+  prevBtn?.addEventListener('click', () => { if (running) control.request = 'prev_action'; });
+  skipBtn?.addEventListener('click', () => { if (running) control.request = 'skip_action'; });
+  nextBtn?.addEventListener('click', () => { if (running) control.request = 'next_segment'; });
 
-  document.getElementById('keep-awake').addEventListener('change', async (e)=>{
+  document.getElementById('keep-awake')?.addEventListener('change', async (e)=>{
     if(e.target.checked){
       const ok = await enableWakeLock();
       if(!ok) startAudioKeepAlive();
@@ -406,23 +467,35 @@ function setUIState(state){
   const nextBtn  = document.getElementById('btn-next');
 
   if(state === 'idle'){
-    startBtn.hidden = false; startBtn.disabled = false;
-    pauseBtn.hidden = true;  pauseBtn.disabled = true;
-    stopBtn.disabled = true;
-    prevBtn.disabled = true; skipBtn.disabled = true; nextBtn.disabled = true;
+    if (startBtn){ startBtn.hidden = false; startBtn.disabled = false; }
+    if (pauseBtn){ pauseBtn.hidden = true;  pauseBtn.disabled = true; }
+    if (stopBtn){ stopBtn.disabled = true; }
+    if (prevBtn){ prevBtn.disabled = true; }
+    if (skipBtn){ skipBtn.disabled = true; }
+    if (nextBtn){ nextBtn.disabled = true; }
+    // UI neutre
+    setActionTexts('—','—');
+    setTimer(0,0);
+    const metaElIdle = document.getElementById('action-meta');
+    if (metaElIdle) metaElIdle.textContent = '—';
+    // remet l'image par défaut
+    setVisualImage(DEFAULT_VISUAL, 'action-visual');
   }
   if(state === 'running'){
-    startBtn.hidden = true;
-    pauseBtn.hidden = false; pauseBtn.disabled = false;
-    stopBtn.disabled = false;
-    prevBtn.disabled = false; skipBtn.disabled = false; nextBtn.disabled = false;
+    if (startBtn){ startBtn.hidden = true; }
+    if (pauseBtn){ pauseBtn.hidden = false; pauseBtn.disabled = false; }
+    if (stopBtn){ stopBtn.disabled = false; }
+    if (prevBtn){ prevBtn.disabled = false; }
+    if (skipBtn){ skipBtn.disabled = false; }
+    if (nextBtn){ nextBtn.disabled = false; }
   }
   if(state === 'paused'){
-    startBtn.hidden = false; startBtn.disabled = false;
-    pauseBtn.hidden = true;  pauseBtn.disabled = true;
-    stopBtn.disabled = false;
-    // On laisse Prev/Skip/Next actifs pendant la pause (la commande sera prise en compte à la reprise)
-    prevBtn.disabled = false; skipBtn.disabled = false; nextBtn.disabled = false;
+    if (startBtn){ startBtn.hidden = false; startBtn.disabled = false; }
+    if (pauseBtn){ pauseBtn.hidden = true;  pauseBtn.disabled = true; }
+    if (stopBtn){ stopBtn.disabled = false; }
+    if (prevBtn){ prevBtn.disabled = false; }
+    if (skipBtn){ skipBtn.disabled = false; }
+    if (nextBtn){ nextBtn.disabled = false; }
   }
 }
 
@@ -434,7 +507,7 @@ async function ensureVoices(){
     if(v?.length){ ready(); }
     else{
       speechSynthesis.onvoiceschanged = ready;
-      speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
+      try { speechSynthesis.speak(new SpeechSynthesisUtterance(' ')); } catch {}
       setTimeout(ready, 500);
     }
   });
@@ -443,11 +516,14 @@ async function ensureVoices(){
 /* ---------- Theme / UI helpers ---------- */
 function setTheme(seg){
   const card = document.getElementById('action-card');
-  card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
-  card.classList.add(themeClass(seg));
+  if (card){
+    card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
+    card.classList.add(themeClass(seg));
+  }
   document.body.setAttribute('data-intensity', seg);
   const name = getIntensityName(seg, settings.lang);
-  document.getElementById('badge-segment').textContent = name;
+  const badge = document.getElementById('badge-segment');
+  if (badge) badge.textContent = name;
 
   const drawCard = document.getElementById('draw-card');
   if (drawCard) {
@@ -456,21 +532,35 @@ function setTheme(seg){
   }
 }
 function setActionTexts(fr, zh){
-  document.getElementById('text-fr').textContent = fr || '—';
-  document.getElementById('text-zh').textContent = zh || '—';
+  const frN = document.getElementById('text-fr');
+  const zhN = document.getElementById('text-zh');
+  if (frN) frN.textContent = fr ?? '—';
+  if (zhN) zhN.textContent = zh ?? '—';
 }
 function setTimer(left, total){
-  document.getElementById('time-left').textContent = formatMMSS(left);
-  document.getElementById('time-total').textContent = formatMMSS(total);
-  const pct = total ? ((total-left)/total)*100 : 0;
-  document.getElementById('progress-bar').style.width = pct.toFixed(2) + '%';
+  const leftEl  = document.getElementById('time-left');
+  const totalEl = document.getElementById('time-total');
+  if (leftEl)  leftEl.textContent  = formatMMSS(left);
+  if (totalEl) totalEl.textContent = formatMMSS(total);
+
+  const pct = total ? ((total - left) / total) * 100 : 0;
+  const bar = document.getElementById('progress-bar');
+  if (bar) bar.style.width = pct.toFixed(2) + '%';
 }
+
 function setMeta(){
-  const segCount = currentPlan?.length || 0;
-  const actionsInSeg = currentPlan?.[segIdx]?.length || 0;
-  const segName = currentPlan?.[segIdx]?.[0]?.segment || 'L1';
-  const meta = `Segment ${segIdx+1}/${segCount} (${getIntensityName(segName, settings.lang)}) • Action ${actIdx+1}/${actionsInSeg}`;
-  document.getElementById('action-meta').textContent = meta;
+  const metaEl = document.getElementById('action-meta');
+  if(!running){
+    if (metaEl) metaEl.textContent = '—';
+    return;
+  }
+  const segCount    = currentPlan?.length || 0;
+  const actionsInSeg= currentPlan?.[segIdx]?.length || 0;
+  const segName     = currentPlan?.[segIdx]?.[0]?.segment || 'L1';
+  const meta = `${dict[settings.lang]?.segment || 'Segment'} ${segIdx+1}/${segCount} `
+             + `(${getIntensityName(segName, settings.lang)}) • `
+             + `${dict[settings.lang]?.action || 'Action'} ${actIdx+1}/${actionsInSeg}`;
+  if (metaEl) metaEl.textContent = meta;
 }
 
 /* ---------- Session loop ---------- */
@@ -511,11 +601,12 @@ async function startSession(){
   segIdx = 0; actIdx = 0; currentLeft = 0; currentTotal = 0;
 
   setUIState('running');
-  if (document.getElementById('keep-awake').checked) {
+  if (document.getElementById('keep-awake')?.checked) {
     const ok = await enableWakeLock();
     if(!ok) startAudioKeepAlive();
   } else {
-    startAudioKeepAlive(); // garde l’audio en vie pour iOS
+    // même si non coché, on démarre le ping audio pour iOS afin d'autoriser le TTS continu
+    startAudioKeepAlive();
   }
 
   outer: while(running && !cancelled && segIdx < currentPlan.length){
@@ -528,6 +619,10 @@ async function startSession(){
       tts.cancel();
       setActionTexts(act.text, act.text_zh);
       setMeta();
+
+      // >>> NOUVEAU : applique l'illustration de l'action si fournie
+      updateVisualFromAction(act, 'action-visual');
+
       interruptAndSpeakCNFR(tts, act.text_zh, act.text, voices);
 
       currentTotal = act.duration;
@@ -537,9 +632,9 @@ async function startSession(){
       // Petite période de cooldown entre actions si on n'a pas sauté/segment
       const afterCooldown = async () => {
         const cd = settings.cooldownSec || 0;
-        if(cd > 0){
+        if(cd > 0 && (reason === 'done' || reason === 'skip_action')){
           setActionTexts('—','—');
-          await runCountdown(cd); // on réutilise runCountdown (prend en compte pause/stop)
+          await runCountdown(cd); // prend en compte pause/stop
         }
       };
 
@@ -549,32 +644,29 @@ async function startSession(){
           await afterCooldown();
           actIdx++;
           break;
+
         case 'prev_action': {
-          // Si on a déjà parcouru >2s, on redémarre l'action; sinon on remonte à l'action précédente
           const elapsed = currentTotal - currentLeft;
           if (elapsed > 2) {
-            // redémarrer la même action
-            // (actIdx inchangé)
-          } else {
-            if (actIdx > 0) {
-              actIdx--;
-            } else if (segIdx > 0) {
-              segIdx--;
-              actIdx = currentPlan[segIdx].length - 1;
-              // Mettre à jour le thème du segment précédent
-              const prevSegName = currentPlan[segIdx][0]?.segment || 'L1';
-              setTheme(prevSegName);
-            } // sinon on reste au tout début
+            // redémarrer la même action (actIdx inchangé)
+          } else if (actIdx > 0) {
+            actIdx--;
+          } else if (segIdx > 0) {
+            segIdx--;
+            actIdx = currentPlan[segIdx].length - 1;
+            const prevSegName = currentPlan[segIdx][0]?.segment || 'L1';
+            setTheme(prevSegName);
           }
           break;
         }
+
         case 'next_segment':
-          // passe immédiatement au segment suivant
           segIdx++;
           actIdx = 0;
           continue outer;
+
         default:
-          // restart_action (optionnel) / autres
+          // restart_action (si besoin)
           break;
       }
     }
@@ -604,8 +696,6 @@ function stopSession(){
   cancelled = true; paused = false; running = false;
   control.request = null;
   tts.cancel();
-  setActionTexts('—','—'); setTimer(0,0);
-  setMeta();
   setUIState('idle');
   stopAudioKeepAlive(); disableWakeLock();
 }
@@ -617,11 +707,13 @@ function initDrawTab(){
   let current = 'L1';
 
   function drawChips(){
+    if(!cont) return;
     cont.innerHTML = '';
     segs.forEach(seg=>{
       const b = document.createElement('button');
       const cls = seg==='SEXE' ? 'sexe' : ('level'+parseInt(seg.replace('L',''),10));
       b.className = `intensity-chip ${cls}` + (current===seg?' active':'');
+      b.type = 'button';
       b.textContent = getIntensityName(seg, settings.lang);
       b.onclick = ()=>{ current=seg; document.body.setAttribute('data-intensity', seg); drawChips(); };
       cont.appendChild(b);
@@ -630,26 +722,42 @@ function initDrawTab(){
   drawChips();
   initDrawTab.refresh = ()=>drawChips();
 
-  document.getElementById('btn-draw-play').onclick = async ()=>{
+  document.getElementById('btn-draw-play')?.addEventListener('click', async ()=>{
     if(!data){ alert('data.json manquant'); return; }
     await ensureVoices();
     const pick = drawOne(settings, data, current, settings.filters);
 
     const card = document.getElementById('draw-card');
-    card.style.display='block';
-    card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
-    card.classList.add(themeClass(current));
+    if(card){
+      card.classList.remove('hidden');
+      card.classList.remove('theme-level1','theme-level2','theme-level3','theme-level4','theme-level5','theme-sexe');
+      card.classList.add(themeClass(current));
+    }
 
-    document.getElementById('draw-fr').textContent = pick ? pick.text : '—';
-    document.getElementById('draw-zh').textContent = pick ? (pick.text_zh || '—') : '—';
+    const fr = document.getElementById('draw-fr');
+    const zh = document.getElementById('draw-zh');
+    if(fr) fr.textContent = pick ? pick.text : '—';
+    if(zh) zh.textContent = pick ? (pick.text_zh || '—') : '—';
+
+    // >>> NOUVEAU : illustration aussi pour le tirage simple
+    if (pick) updateVisualFromAction(pick, 'draw-visual');
 
     if(pick){ interruptAndSpeakCNFR(tts, pick.text_zh, pick.text, voices); }
-  };
+  });
+}
+
+/* ---------- Auto-pause quand l’onglet est masqué ---------- */
+function wireVisibilityPause(){
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden && running && !paused){
+      pauseSession();
+    }
+  });
 }
 
 /* ---------- Micro-interactions ---------- */
 document.addEventListener('pointerdown', (e)=>{
-  const b = e.target.closest('button');
+  const b = e.target.closest?.('button');
   if(!b) return;
   const rect = b.getBoundingClientRect();
   b.style.setProperty('--mx', `${e.clientX - rect.left}px`);
@@ -658,7 +766,7 @@ document.addEventListener('pointerdown', (e)=>{
 
 // Tilt subtil
 const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-(() => {
+(()=>{
   if (reduceMotion) return;
   const boxes = [document.getElementById('action-visual'), document.getElementById('draw-visual')].filter(Boolean);
   const max = 6;

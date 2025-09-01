@@ -324,50 +324,50 @@
     {
       "id": "missionnaire",
       "templates": [
-        { "text": "Missionnaire jambes sur épaules : {P2} pose ses jambes sur les épaules de {P1} pendant qu’il la pénètre.", "text_zh": "传统体位（双腿置于肩上）：{P2} 将双腿放在 {P1} 的肩上，{P1} 进行插入。" },
-        { "text": "Missionnaire serré : {P2} croise les chevilles derrière le dos de {P1} pendant la pénétration.", "text_zh": "紧贴传统体位：插入时，{P2} 将脚踝交叉于 {P1} 的背后。" }
+        {"image": "20250901_1409_Rencontre Timide en Intérieur_simple_compose_01k42jtdh7e7vas5g31n2janm7@540.webp", "text": "Missionnaire jambes sur épaules : {P2} pose ses jambes sur les épaules de {P1} pendant qu’il la pénètre.", "text_zh": "传统体位（双腿置于肩上）：{P2} 将双腿放在 {P1} 的肩上，{P1} 进行插入。" },
+        {"image": "Position-levrette variante 3@540.webp", "text": "Missionnaire serré : {P2} croise les chevilles derrière le dos de {P1} pendant la pénétration.", "text_zh": "紧贴传统体位：插入时，{P2} 将脚踝交叉于 {P1} 的背后。" }
       ]
     },
     {
       "id": "levrette",
       "templates": [
-        { "text": "Levrette aplatie : {P2} allongée sur le ventre, {P1} la pénètre par derrière en la plaquant.", "text_zh": "俯卧后入位：{P2} 俯卧，{P1} 从后方插入并将身体贴住她。" },
-        { "text": "Levrette classique : {P2} à quatre pattes, {P1} la pénètre par derrière.", "text_zh": "后入位：{P2} 四肢着地，{P1} 从后方插入。" }
+        {"image": "Position-Papillon variante@540.webp", "text": "Levrette aplatie : {P2} allongée sur le ventre, {P1} la pénètre par derrière en la plaquant.", "text_zh": "俯卧后入位：{P2} 俯卧，{P1} 从后方插入并将身体贴住她。" },
+        {"image": "Position-levrette variante@540.webp", "text": "Levrette classique : {P2} à quatre pattes, {P1} la pénètre par derrière.", "text_zh": "后入位：{P2} 四肢着地，{P1} 从后方插入。" }
       ]
     },
     {
       "id": "cowgirl",
       "templates": [
-        { "text": "Cowgirl assise : {P2} s’assoit sur {P1} et contrôle la pénétration en mouvement vertical.", "text_zh": "女上位：{P2} 坐在 {P1} 身上，以上下动作控制插入。" },
-        { "text": "Cowgirl inversée : {P2} s’assoit sur {P1} dos tourné et effectue les mouvements de va-et-vient.", "text_zh": "反女上位：{P2} 背对 {P1} 坐上，进行前后抽动。" }
+        {"image": "Position-Lotus assis@540.webp", "text": "Cowgirl assise : {P2} s’assoit sur {P1} et contrôle la pénétration en mouvement vertical.", "text_zh": "女上位：{P2} 坐在 {P1} 身上，以上下动作控制插入。" },
+        {"image": "Position-lotus collant jaune@540.webp", "text": "Cowgirl inversée : {P2} s’assoit sur {P1} dos tourné et effectue les mouvements de va-et-vient.", "text_zh": "反女上位：{P2} 背对 {P1} 坐上，进行前后抽动。" }
       ]
     },
     {
       "id": "cuillere",
       "templates": [
-        { "text": "Cuillère classique : {P1} allongé derrière {P2}, il la pénètre allongés sur le côté.", "text_zh": "勺子位：二人侧躺，{P1} 在 {P2} 身后插入。" },
-        { "text": "Cuillère jambe levée : {P2} lève la jambe supérieure pendant que {P1} la pénètre.", "text_zh": "勺子位抬腿：{P2} 抬起上侧腿，{P1} 进行插入。" }
+        {"image": "Position-lotus serre collant jaune variante@540.webp", "text": "Cuillère classique : {P1} allongé derrière {P2}, il la pénètre allongés sur le côté.", "text_zh": "勺子位：二人侧躺，{P1} 在 {P2} 身后插入。" },
+        {"image": "Position-lotus serre collant jaune@540.webp", "text": "Cuillère jambe levée : {P2} lève la jambe supérieure pendant que {P1} la pénètre.", "text_zh": "勺子位抬腿：{P2} 抬起上侧腿，{P1} 进行插入。" }
       ]
     },
     {
       "id": "lotus",
       "templates": [
-        { "text": "Lotus assis : {P1} assis, {P2} s’assoit sur lui face à face et s’enlace.", "text_zh": "莲花位：{P1} 盘坐，{P2} 面对面坐在他身上并相互环抱。" },
-        { "text": "Lotus serré : {P2} enroule ses jambes autour de {P1} en position assise.", "text_zh": "莲花位紧贴：{P2} 在坐姿中用双腿缠绕 {P1} 的腰部。" }
+        {"image": "Position-Lotus serre@540.webp", "text": "Lotus assis : {P1} assis, {P2} s’assoit sur lui face à face et s’enlace.", "text_zh": "莲花位：{P1} 盘坐，{P2} 面对面坐在他身上并相互环抱。" },
+        {"image": "Position-missionaire cheville serre@540.webp", "text": "Lotus serré : {P2} enroule ses jambes autour de {P1} en position assise.", "text_zh": "莲花位紧贴：{P2} 在坐姿中用双腿缠绕 {P1} 的腰部。" }
       ]
     },
     {
       "id": "bord_du_lit",
       "templates": [
-        { "text": "Papillon : {P2} allongée sur le dos au bord du lit, {P1} debout la pénètre en tenant ses cuisses.", "text_zh": "蝴蝶位（床沿）：{P2} 仰躺在床沿，{P1} 站立抓住她的大腿插入。" },
-        { "text": "Bord du lit jambes sur épaules : {P2} allongée sur le dos au bord du lit, {P1} soulève ses jambes sur ses épaules en la pénétrant.", "text_zh": "床沿抬腿：{P2} 仰躺床沿，{P1} 将她的双腿抬到肩上进行插入。" }
+        {"image": "Position-missionaire serre@540.webp", "text": "Papillon : {P2} allongée sur le dos au bord du lit, {P1} debout la pénètre en tenant ses cuisses.", "text_zh": "蝴蝶位（床沿）：{P2} 仰躺在床沿，{P1} 站立抓住她的大腿插入。" },
+        {"image": "Position-Papillon épaule@540.webp", "text": "Bord du lit jambes sur épaules : {P2} allongée sur le dos au bord du lit, {P1} soulève ses jambes sur ses épaules en la pénétrant.", "text_zh": "床沿抬腿：{P2} 仰躺床沿，{P1} 将她的双腿抬到肩上进行插入。" }
       ]
     },
     {
       "id": "chaise",
       "templates": [
-        { "text": "Chaise face à face : {P1} assis sur une chaise, {P2} s’assoit sur lui et le chevauche.", "text_zh": "椅上对坐：{P1} 坐在椅子上，{P2} 坐到他身上骑乘插入。" },
-        { "text": "Chaise inversée : {P1} assis sur une chaise, {P2} s’assoit sur lui dos tourné et contrôle les mouvements.", "text_zh": "椅上反坐：{P1} 坐在椅子上，{P2} 背对他坐上自行控制动作。" }
+        {"text": "Chaise face à face : {P1} assis sur une chaise, {P2} s’assoit sur lui et le chevauche.", "text_zh": "椅上对坐：{P1} 坐在椅子上，{P2} 坐到他身上骑乘插入。" },
+        {"text": "Chaise inversée : {P1} assis sur une chaise, {P2} s’assoit sur lui dos tourné et contrôle les mouvements.", "text_zh": "椅上反坐：{P1} 坐在椅子上，{P2} 背对他坐上自行控制动作。" }
       ]
     },
     {
