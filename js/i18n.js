@@ -19,6 +19,8 @@ export const dict = {
     unit_s:"s",
     min_label:"min",
     max_label:"max",
+    keep_awake: "Garder l’écran allumé pendant la session",
+    keep_awake_short: "Garder l'écran allumé",
 
     
   },
@@ -42,6 +44,8 @@ export const dict = {
     unit_s:"秒",
     min_label:"最小",
     max_label:"最大",
+    keep_awake: "会话期间保持屏幕常亮",
+    keep_awake_short: "保持屏幕开启",
   }
 };
 export function applyI18n(lang){

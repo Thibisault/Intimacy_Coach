@@ -43,44 +43,27 @@ body{
 /* ========== ACTION CARD ========== */
 /* 1) Cadre visuel carré pour une image 1024x1024 (s’adapte en responsive) */
 #action-card{ padding:18px; position:relative; }
-/* Le cadre visuel (déjà en 1:1) */
 #action-visual{
   position:relative;
   width:100%;
-  aspect-ratio:1/1;
-  background:url("./test.png") center/contain no-repeat var(--card);
+  aspect-ratio:1 / 1;                 /* carré parfait */
+  background:url("./test.png") center/contain no-repeat var(--card); /* image entière (contain) */
   border-radius:12px;
   overflow:hidden;
 }
 #action-visual::before{
   content:"";
   position:absolute; inset:0;
-  background:var(--overlay); /* ex: rgba(0,0,0,0.35) */
+  background:var(--overlay);          /* voile sombre pour le texte */
   z-index:0;
 }
 
-/* TEXTE en haut du cadre (centré horizontalement) */
+/* 2) Texte centré par-dessus l’image */
 .action-overlay{
   position:absolute; inset:0; z-index:1;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
-  justify-content:flex-start;   /* <-- en haut */
-  padding:16px 12px 72px;       /* padding-bottom pour ne pas chevaucher les boutons */
-  gap:10px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding:12px; text-align:center;
 }
-
-/* BOUTONS centrés en bas du cadre */
-.controls-in-visual{
-  position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
-  z-index:2;
-  display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
-  background:rgba(0,0,0,0.25);  /* lisible sur image claire */
-  backdrop-filter:blur(4px);
-  padding:6px 8px;
-  border-radius:12px;
-}
-
-/* (Déjà présent) Style des boutons — réutilisé tel quel */
-
 .action-text{
   line-height:1.3; margin:0; word-break:break-word;
 }
@@ -195,3 +178,25 @@ button.tiny{min-width:auto;padding:6px 8px;border-radius:8px}
 
 /* Tip grisé */
 .muted-tip{color:#9ca3af}
+
+/* Barre haute au-dessus du cadre image : statut + interrupteur veille */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:6px 0 10px;
+}
+
+/* Bloc "Veille" compact */
+.keep-awake{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+}
+.keep-awake .label{
+  font-size:.95rem;
+  user-select:none;
+}
+
