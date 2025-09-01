@@ -2,128 +2,216 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="theme-color" content="#111827" />
     <title>Intimacy Coach</title>
-    <meta name="description" content="Séquences érotiques guidées FR + CN avec voix et compte à rebours." />
-    <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="icon" href="./favicon.ico">
-    <link rel="apple-touch-icon" href="./icons/icon-192.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta
+      name="description"
+      content="Séquences érotiques guidées FR + CN avec voix et compte à rebours."
+    />
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
     <!-- Polices -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
 
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="ambient"></div>
+    <div class="ambient" aria-hidden="true"></div>
 
-    <div id="app">
+    <div id="app" class="app">
+      <!-- Header global -->
       <header class="app-header">
-        <h1>Intimacy Coach</h1>
-        <div class="lang-toggle">
-          <button id="btn-fr" class="chip active">FR</button>
-          <button id="btn-zh" class="chip">中文</button>
+        <h1 class="app-title">Intimacy Coach</h1>
+
+        <div class="header-actions">
+          <!-- Langues -->
+          <div class="lang-toggle" role="group" aria-label="Langue">
+            <button id="btn-fr" class="chip active" type="button">FR</button>
+            <button id="btn-zh" class="chip" type="button">中文</button>
+          </div>
+
+          <!-- Garde-écran (global, même ID qu'avant) -->
+          <div
+            class="keep-awake"
+            title="Empêche l’écran de s’éteindre pendant la session"
+          >
+            <label class="switch">
+              <input type="checkbox" id="keep-awake" />
+              <span class="slider" aria-hidden="true"></span>
+            </label>
+            <span
+              class="label"
+              id="keep-awake-label"
+              data-i18n="keep_awake_short"
+              >Garder l'écran allumé</span
+            >
+          </div>
         </div>
       </header>
 
-      <main>
-        <nav class="tabs">
-          <button class="tab active" data-tab="play">
-            <img class="tab-ico icon-32" src="./public/icons/ui/tab-play.webp" alt="" />
+      <main class="app-main">
+        <!-- Onglets -->
+        <nav class="tabs" role="tablist" aria-label="Sections">
+          <button
+            class="tab active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="tab-play"
+            id="tabbtn-play"
+            data-tab="play"
+            type="button"
+          >
+            <img
+              class="tab-ico icon-32"
+              src="./public/icons/ui/tab-play.webp"
+              alt=""
+              aria-hidden="true"
+            />
             <span data-i18n="tab_play">Jouer</span>
           </button>
-          <button class="tab" data-tab="settings">
-            <img class="tab-ico icon-32" src="./public/icons/ui/tab-settings.webp" alt="" />
+
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tab-settings"
+            id="tabbtn-settings"
+            data-tab="settings"
+            type="button"
+          >
+            <img
+              class="tab-ico icon-32"
+              src="./public/icons/ui/tab-settings.webp"
+              alt=""
+              aria-hidden="true"
+            />
             <span data-i18n="tab_settings">Personnaliser</span>
           </button>
-          <button class="tab" data-tab="draw">
-            <img class="tab-ico icon-32" src="./public/icons/ui/tab-draw.webp" alt="" />
+
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tab-draw"
+            id="tabbtn-draw"
+            data-tab="draw"
+            type="button"
+          >
+            <img
+              class="tab-ico icon-32"
+              src="./public/icons/ui/tab-draw.webp"
+              alt=""
+              aria-hidden="true"
+            />
             <span data-i18n="tab_draw">Tirage simple</span>
           </button>
         </nav>
 
         <!-- PLAY -->
-        <section id="tab-play" class="tabpanel active">
-          <div class="topbar">
-            <div class="status">
-              <div class="badges">
-                <span id="badge-segment" class="badge strong">—</span>
-              </div>
-            </div>
-
-            <div class="keep-awake" title="Empêche l’écran de s’éteindre pendant la session">
-              <label class="switch">
-                <input type="checkbox" id="keep-awake">
-                <span class="slider"></span>
-              </label>
-              <span class="label" id="keep-awake-label" data-i18n="keep_awake_short">Garder l'écran allumé</span>
-            </div>
-          </div>
-
-          <!-- CARTE LECTEUR -->
-          <div id="action-card" class="card theme-level1">
-            <div id="action-visual" class="action-visual" aria-label="Cadre texte sur image">
+        <section
+          id="tab-play"
+          class="tabpanel active"
+          role="tabpanel"
+          aria-labelledby="tabbtn-play"
+        >
+          <!-- Carte lecteur : responsive (pile sur mobile / grille sur desktop) -->
+          <div id="action-card" class="card player-card theme-level1">
+            <div id="action-visual" class="action-visual" aria-label="Illustration">
               <div class="action-overlay">
-                <div class="action-text zh" id="text-zh">—</div>
-                <div class="action-text fr" id="text-fr">—</div>
+                <div class="action-text zh" id="text-zh" aria-live="polite">—</div>
+                <div class="action-text fr" id="text-fr" aria-live="polite">—</div>
               </div>
             </div>
 
-            <div class="divider" role="separator" aria-hidden="true"></div>
-
-            <!-- PLAYER -->
             <div class="player">
+              <div class="player-row meta-row" aria-live="polite">
+                <div class="badges">
+                  <span id="badge-segment" class="badge strong">—</span>
+                </div>
+                <span id="action-meta" class="meta-chip">—</span>
+              </div>
+
+              <div class="divider" role="separator" aria-hidden="true"></div>
+
               <div class="player-row controls-row">
-                <button id="btn-prev" class="player-btn" title="Revenir à l’action précédente">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6V5zm3.5 7 8.5 6V6l-8.5 6z" fill="currentColor"/></svg>
+                <button id="btn-prev" class="player-btn" type="button" title="Revenir à l’action précédente">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 5h2v14H6V5zm3.5 7 8.5 6V6l-8.5 6z" fill="currentColor" />
+                  </svg>
                 </button>
 
-                <button id="btn-start" class="player-btn primary" title="Lecture">
-                  <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="">
-                </button>
-                <button id="btn-pause" class="player-btn secondary" title="Pause" hidden>
-                  <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="">
+                <button id="btn-start" class="player-btn primary" type="button" title="Lecture">
+                  <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="" aria-hidden="true" />
                 </button>
 
-                <button id="btn-next" class="player-btn" title="Aller à l’intensité suivante">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2V5zM6 6l8.5 6L6 18V6z" fill="currentColor"/></svg>
+                <button id="btn-pause" class="player-btn secondary" type="button" title="Pause" hidden>
+                  <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="" aria-hidden="true" />
                 </button>
 
-                <button id="btn-skip" class="player-btn" title="Passer l’action">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l7 6-7 6V6zm9 0h1.5v12H16V6z" fill="currentColor"/></svg>
+                <button id="btn-next" class="player-btn" type="button" title="Aller à l’intensité suivante">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 5h2v14h-2V5zM6 6l8.5 6L6 18V6z" fill="currentColor" />
+                  </svg>
                 </button>
 
-                <button id="btn-stop" class="player-btn danger" title="Stop" disabled>
-                  <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="">
+                <button id="btn-skip" class="player-btn" type="button" title="Passer l’action">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 6l7 6-7 6V6zm9 0h1.5v12H16V6z" fill="currentColor" />
+                  </svg>
+                </button>
+
+                <button id="btn-stop" class="player-btn danger" type="button" title="Stop" disabled>
+                  <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="" aria-hidden="true" />
                 </button>
               </div>
 
               <div class="player-row scrub-row">
                 <span id="time-left" class="time-badge">00:00</span>
-                <div class="scrubber">
-                  <div id="progress" class="progress"><div id="progress-bar"></div></div>
+                <div class="scrubber" aria-label="Barre de progression">
+                  <div id="progress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div id="progress-bar"></div>
+                  </div>
                 </div>
                 <span id="time-total" class="time-badge">00:00</span>
-              </div>
-
-              <div class="player-row meta-row" aria-live="polite">
-                <span id="action-meta" class="meta-chip">—</span>
               </div>
             </div>
           </div>
         </section>
 
         <!-- SETTINGS -->
-        <section id="tab-settings" class="tabpanel">
+        <section
+          id="tab-settings"
+          class="tabpanel"
+          role="tabpanel"
+          aria-labelledby="tabbtn-settings"
+        >
           <div class="stack">
             <div class="card">
               <details class="accordion">
                 <summary>👥 <span data-i18n="participants">Participants</span></summary>
-                <div class="field"><label>👨 <span data-i18n="man_name">Nom homme</span></label><input id="inp-p1" placeholder="Homme"></div>
-                <div class="field"><label>👩 <span data-i18n="woman_name">Nom femme</span></label><input id="inp-p2" placeholder="Femme"></div>
+                <div class="field">
+                  <label>👨 <span data-i18n="man_name">Nom homme</span></label>
+                  <input id="inp-p1" placeholder="Homme" />
+                </div>
+                <div class="field">
+                  <label>👩 <span data-i18n="woman_name">Nom femme</span></label>
+                  <input id="inp-p2" placeholder="Femme" />
+                </div>
               </details>
             </div>
 
@@ -139,7 +227,7 @@
                 <summary>🔊 <span data-i18n="voices_title">Voix</span></summary>
                 <div class="field"><label>Voix FR</label><select id="sel-voice-fr"></select></div>
                 <div class="field"><label>Voix 中文</label><select id="sel-voice-zh"></select></div>
-                <button id="btn-test-voices" class="secondary" data-i18n="test_voices">Tester les voix</button>
+                <button id="btn-test-voices" class="secondary" data-i18n="test_voices" type="button">Tester les voix</button>
                 <small class="muted-tip">Conseil : installe une voix FR et une voix 中文 pour un accent parfait.</small>
               </details>
             </div>
@@ -147,27 +235,33 @@
             <div class="card">
               <details class="accordion">
                 <summary>🪄 <span data-i18n="filters_title">Exclusions par défaut</span></summary>
-                <div class="field checkbox"><label><input type="checkbox" id="def-anal"> <span data-i18n="filter_anal">Exclure anal</span></label></div>
-                <div class="field checkbox"><label><input type="checkbox" id="def-hard"> <span data-i18n="filter_hard">Exclure hard</span></label></div>
-                <div class="field checkbox"><label><input type="checkbox" id="def-clothed"> <span data-i18n="filter_clothed">Exclure clothed</span></label></div>
+                <div class="field checkbox">
+                  <label><input type="checkbox" id="def-anal" /> <span data-i18n="filter_anal">Exclure anal</span></label>
+                </div>
+                <div class="field checkbox">
+                  <label><input type="checkbox" id="def-hard" /> <span data-i18n="filter_hard">Exclure hard</span></label>
+                </div>
+                <div class="field checkbox">
+                  <label><input type="checkbox" id="def-clothed" /> <span data-i18n="filter_clothed">Exclure clothed</span></label>
+                </div>
               </details>
             </div>
 
             <div class="card">
               <details class="accordion">
                 <summary>🧩 <span data-i18n="sequence">Séquence</span></summary>
-                <div id="sequence-list" class="sequence-list" style="margin-top:8px"></div>
+                <div id="sequence-list" class="sequence-list"></div>
 
-                <div class="row add-controls" style="margin-top:8px">
+                <div class="row add-controls">
                   <div id="add-seg-chips" class="chip-row"></div>
                   <div class="field inline">
                     <label data-i18n="minutes_label">Minutes</label>
                     <div class="input-affix">
-                      <input id="inp-add-min" type="number" min="1" value="3">
+                      <input id="inp-add-min" type="number" min="1" value="3" />
                       <span class="affix" data-i18n="unit_min">min</span>
                     </div>
                   </div>
-                  <button id="btn-add-step" class="secondary" data-i18n="add_step">Ajouter</button>
+                  <button id="btn-add-step" class="secondary" data-i18n="add_step" type="button">Ajouter</button>
                 </div>
               </details>
             </div>
@@ -175,34 +269,42 @@
             <div class="card">
               <details class="accordion">
                 <summary>⏱️ <span data-i18n="durations">Durées min/max par segment (sec)</span></summary>
-                <div class="ranges-grid" style="margin-top:8px"></div>
+                <div class="ranges-grid"></div>
               </details>
             </div>
           </div>
         </section>
 
         <!-- DRAW -->
-        <section id="tab-draw" class="tabpanel">
+        <section
+          id="tab-draw"
+          class="tabpanel"
+          role="tabpanel"
+          aria-labelledby="tabbtn-draw"
+        >
           <div class="card">
             <div id="draw-intensity-chips" class="chip-row"></div>
-            <div class="controls" style="margin-top:8px">
-              <button id="btn-draw-play" class="primary" data-i18n="play_btn">Jouer</button>
+            <div class="controls">
+              <button id="btn-draw-play" class="primary" data-i18n="play_btn" type="button">Jouer</button>
             </div>
           </div>
 
-          <div id="draw-card" class="card theme-level1" style="margin-top:12px;display:none">
-            <div id="draw-visual" class="action-visual" aria-label="Cadre texte sur image">
+          <div id="draw-card" class="card theme-level1 hidden">
+            <div id="draw-visual" class="action-visual" aria-label="Illustration tirage">
               <div class="action-overlay">
-                <div class="action-text zh" id="draw-zh">—</div>
-                <div class="action-text fr" id="draw-fr">—</div>
+                <div class="action-text zh" id="draw-zh" aria-live="polite">—</div>
+                <div class="action-text fr" id="draw-fr" aria-live="polite">—</div>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer>
-        <small>© 2025 — <span>Intimacy Coach</span> • <span data-i18n="offline_ready">PWA hors-ligne</span></small>
+      <footer class="app-footer">
+        <small
+          >© 2025 — <span>Intimacy Coach</span> •
+          <span data-i18n="offline_ready">PWA hors-ligne</span></small
+        >
       </footer>
     </div>
 
@@ -217,9 +319,9 @@
     <script type="module" src="./js/app.js"></script>
 
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(()=>{});
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {});
         });
       }
     </script>
