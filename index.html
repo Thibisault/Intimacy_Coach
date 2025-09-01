@@ -44,17 +44,34 @@
           </div>
 
           <!-- Carte d’action : visuel (carré 1:1) + séparateur + timer -->
-          <div id="action-card" class="card theme-level1">
-            <!-- Cadre image carré avec texte par-dessus -->
-            <div id="action-visual" aria-label="Cadre texte sur image">
-              <div class="action-overlay">
-                <div class="action-text zh" id="text-zh">—</div>
-                <div class="action-text fr" id="text-fr">—</div>
-              </div>
-            </div>
+<div id="action-card" class="card theme-level1">
+  <!-- Cadre image (carré) -->
+  <div id="action-visual" aria-label="Cadre texte sur image">
+    <!-- Texte en haut du cadre -->
+    <div class="action-overlay">
+      <div class="action-text zh" id="text-zh">—</div>
+      <div class="action-text fr" id="text-fr">—</div>
+    </div>
 
-            <!-- Séparateur net entre cadre et timer -->
-            <div class="divider" role="separator" aria-hidden="true"></div>
+    <!-- Boutons centrés en bas du cadre -->
+    <div class="controls controls-in-visual">
+      <button id="btn-start" class="primary" data-i18n="start">Démarrer</button>
+      <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
+      <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
+    </div>
+  </div>
+
+  <!-- Séparateur + timer restent en dessous du cadre -->
+  <div class="divider" role="separator" aria-hidden="true"></div>
+  <div class="timer">
+    <div id="progress" class="progress"><div id="progress-bar"></div></div>
+    <div class="time-row">
+      <span id="time-left">00:00</span>
+      <span id="time-total">00:00</span>
+    </div>
+  </div>
+</div>
+
 
             <!-- Timer -->
             <div class="timer">
@@ -66,11 +83,7 @@
             </div>
           </div>
 
-          <div class="controls">
-            <button id="btn-start" class="primary" data-i18n="start">Démarrer</button>
-            <button id="btn-toggle" class="secondary" data-i18n="pause" disabled>Pause</button>
-            <button id="btn-stop" class="danger" data-i18n="stop" disabled>Stop</button>
-          </div>
+ 
 
           <div class="hint-row">
             <label class="switch"><input type="checkbox" id="keep-awake"><span class="slider"></span></label>

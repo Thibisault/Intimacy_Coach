@@ -43,27 +43,44 @@ body{
 /* ========== ACTION CARD ========== */
 /* 1) Cadre visuel carré pour une image 1024x1024 (s’adapte en responsive) */
 #action-card{ padding:18px; position:relative; }
+/* Le cadre visuel (déjà en 1:1) */
 #action-visual{
   position:relative;
   width:100%;
-  aspect-ratio:1 / 1;                 /* carré parfait */
-  background:url("./test.png") center/contain no-repeat var(--card); /* image entière (contain) */
+  aspect-ratio:1/1;
+  background:url("./test.png") center/contain no-repeat var(--card);
   border-radius:12px;
   overflow:hidden;
 }
 #action-visual::before{
   content:"";
   position:absolute; inset:0;
-  background:var(--overlay);          /* voile sombre pour le texte */
+  background:var(--overlay); /* ex: rgba(0,0,0,0.35) */
   z-index:0;
 }
 
-/* 2) Texte centré par-dessus l’image */
+/* TEXTE en haut du cadre (centré horizontalement) */
 .action-overlay{
   position:absolute; inset:0; z-index:1;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:10px; padding:12px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  justify-content:flex-start;   /* <-- en haut */
+  padding:16px 12px 72px;       /* padding-bottom pour ne pas chevaucher les boutons */
+  gap:10px;
 }
+
+/* BOUTONS centrés en bas du cadre */
+.controls-in-visual{
+  position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
+  z-index:2;
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+  background:rgba(0,0,0,0.25);  /* lisible sur image claire */
+  backdrop-filter:blur(4px);
+  padding:6px 8px;
+  border-radius:12px;
+}
+
+/* (Déjà présent) Style des boutons — réutilisé tel quel */
+
 .action-text{
   line-height:1.3; margin:0; word-break:break-word;
 }
