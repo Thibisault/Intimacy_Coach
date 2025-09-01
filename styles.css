@@ -18,9 +18,13 @@
 
   /* Progress */
   --progress-track: rgba(255,255,255,.08);
-
   --btn-h: clamp(56px, 8vh, 78px);
-  --btn-minw: 180px;
+  --btn-minw: 160px;
+  --btn-gap: 8px;
+  --btn-icon-scale: .7;             /* ~70% de la hauteur du bouton */
+  --tab-h: clamp(64px, 8vh, 88px);
+  --tab-gap: 6px;
+  --tab-icon-scale: .7;   
   
 }
 
@@ -275,38 +279,62 @@ footer{margin-top:auto;padding:12px 0;color:var(--muted);text-align:center}
 .theme-level1,.theme-level2,.theme-level3,.theme-level4,.theme-level5,.theme-sexe{ outline:none }
 
 
-/* Respect de hidden */
+/* Respect de [hidden] */
 .icon-btn[hidden]{ display:none !important; }
-.icon-btn:not([hidden]){ display:inline-flex; }
 
+/* -------- Boutons (icône au-dessus du label) -------- */
 .icon-btn{
+  display:inline-flex;
+  flex-direction: column;           /* icône au-dessus du texte */
+  align-items:center;
+  justify-content:center;
+  gap: var(--btn-gap);
   height: var(--btn-h);
   min-width: var(--btn-minw);
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 0 16px;
-  text-align: center;
+  padding: 6px 12px;
+  text-align:center;
 }
 
-/* 100% de la hauteur, mais plafonné par --icon-max si défini */
-.icon-btn img{
-  height: min(100%, var(--icon-max, 999px));
+.icon-btn .icon{
+  /* icône = % de la hauteur, sans dépasser le plafond défini par .icon-XX */
+  height: min(calc(100% * var(--btn-icon-scale)), var(--icon-max, 999px));
   width: auto;
   object-fit: contain;
-  display: block;
+  display:block;
   flex: 0 0 auto;
   filter: drop-shadow(0 0 4px rgba(0,0,0,.22));
 }
 
-/* Variante icône seule carrée (facultatif) */
-.icon-btn.icon-only{ gap:0; padding:0; min-width: var(--btn-h); }
+.icon-btn .label{
+  line-height:1.1;
+  font-weight:600;
+  white-space:nowrap;
+}
 
-/* Utilitaires de plafond si tu n’as que du raster 1x */
-.icon-32 { --icon-max: 32px; }   /* empêche d’upscaler > 32px */
-.icon-64 { --icon-max: 64px; }
+/* -------- Tabs (icône au-dessus du label) -------- */
+.tabs .tab{
+  display:flex;
+  flex-direction: column;           /* icône au-dessus du texte */
+  align-items:center;
+  justify-content:center;
+  gap: var(--tab-gap);
+  height: var(--tab-h);
+  padding: 8px 10px;
+}
+
+.tab .tab-ico{
+  height: min(calc(100% * var(--tab-icon-scale)), var(--icon-max, 999px));
+  width: auto;
+  object-fit: contain;
+  display:block;
+}
+
+/* -------- Plafonds pour garder la netteté (si assets 32x32) -------- */
+.icon-32 { --icon-max: 32px; }
+.icon-64 { --icon-max: 64px; }   /* si tu ajoutes des 64x64, utilise celle-ci */
 .icon-96 { --icon-max: 96px; }
 
+/* Mobile plein largeur (optionnel) */
 @media (max-width:420px){
   .controls{ gap:12px }
   .icon-btn{ min-width:unset; width:100% }

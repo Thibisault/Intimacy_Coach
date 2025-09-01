@@ -30,21 +30,21 @@
       </header>
 
       <main>
+        
         <nav class="tabs">
           <button class="tab active" data-tab="play">
-            <img class="tab-ico" src="./public/icons/ui/tab-play.webp" alt="" />
+            <img class="tab-ico icon-32" src="./public/icons/ui/tab-play.webp" alt="" />
             <span data-i18n="tab_play">Jouer</span>
           </button>
           <button class="tab" data-tab="settings">
-            <img class="tab-ico" src="./public/icons/ui/tab-settings.webp" alt="" />
+            <img class="tab-ico icon-32" src="./public/icons/ui/tab-settings.webp" alt="" />
             <span data-i18n="tab_settings">Personnaliser</span>
           </button>
           <button class="tab" data-tab="draw">
-            <img class="tab-ico" src="./public/icons/ui/tab-draw.webp" alt="" />
+            <img class="tab-ico icon-32" src="./public/icons/ui/tab-draw.webp" alt="" />
             <span data-i18n="tab_draw">Tirage simple</span>
           </button>
         </nav>
-
 
         <!-- PLAY -->
         <section id="tab-play" class="tabpanel active">
@@ -86,24 +86,26 @@
             </div>
           </div>
 
+         
           <div class="controls">
-            <button id="btn-start" class="primary icon-btn icon-only" type="button">
-              <img class="icon icon-32"
-                  src="./public/icons/ui/btn-start.webp" alt="">
-              <span class="label" data-i18n="Démarrer"></span>
+            <!-- START -->
+            <button id="btn-start" class="primary icon-btn" type="button">
+              <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="">
+              <span class="label" data-i18n="start">Démarrer</span>
             </button>
 
+            <!-- PAUSE -->
             <button id="btn-pause" class="secondary icon-btn" type="button" hidden>
-              <img class="icon icon-32"
-                  src="./public/icons/ui/btn-pause.webp" alt="">
+              <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="">
               <span class="label" data-i18n="pause">Pause</span>
             </button>
 
+            <!-- STOP -->
             <button id="btn-stop" class="danger icon-btn" type="button" disabled>
-              <img class="icon icon-32"
-                  src="./public/icons/ui/btn-stop.webp" alt="">
+              <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="">
               <span class="label" data-i18n="stop">Stop</span>
             </button>
+          </div>
 
 
 
