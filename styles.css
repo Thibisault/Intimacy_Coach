@@ -1,31 +1,26 @@
-/* ====== Design érotique “Velvet” – mobile-first (fusion) ====== */
+/* ====== Design “Velvet” – mobile-first ====== */
 :root{
-  /* Neutres */
   --bg-0:#0a0a0f; --bg-1:#0e1016; --fg:#f4f4f7; --muted:#b7b9c4;
-  --card-bg: rgba(20,18,26,.66); /* glass */
+  --card-bg: rgba(20,18,26,.66);
   --card-border: rgba(255,255,255,.08);
   --shadow: 0 12px 40px rgba(0,0,0,.35);
   --radius-lg: 20px; --radius-md:14px; --radius-sm:10px;
   --easing: cubic-bezier(.22,.61,.36,1);
 
-  /* Accents (changent selon l’intensité) */
   --accent:#d96e8e; --accent-2:#f2b36c;
   --grad-1:#1a0f1a; --grad-2:#1a1422;
 
-  /* UI */
   --danger:#ef4444; --ok:#10b981; --chip:#1a1c25; --chip-ink:#e8e9ef;
 
-  /* Player / Tabs */
   --progress-track: rgba(255,255,255,.08);
   --tab-h: clamp(64px, 8vh, 88px);
   --tab-gap: 6px;
   --tab-icon-scale: .7;
 
-  /* Visuels */
   --visual-bg: url("./test.webp");
 }
 
-/* Intensités → couleurs */
+/* Intensités */
 body[data-intensity="L1"]{ --accent:#d17aa6; --accent-2:#f0c9a6; --grad-1:#140e16; --grad-2:#1b1420; }
 body[data-intensity="L2"]{ --accent:#c27b57; --accent-2:#e8b076; --grad-1:#141013; --grad-2:#1a1314; }
 body[data-intensity="L3"]{ --accent:#cf6f4f; --accent-2:#eba759; --grad-1:#161112; --grad-2:#1f1412; }
@@ -33,7 +28,7 @@ body[data-intensity="L4"]{ --accent:#cf2b6b; --accent-2:#ff7ab2; --grad-1:#170e1
 body[data-intensity="L5"]{ --accent:#c2203f; --accent-2:#ff6b6b; --grad-1:#170c0e; --grad-2:#250c12; }
 body[data-intensity="SEXE"]{ --accent:#9e3bd6; --accent-2:#e3b3ff; --grad-1:#150e1a; --grad-2:#220f2d; }
 
-/* Fond respirant + vignettage */
+/* Fond */
 html,body{height:100%}
 body{
   margin:0; color:var(--fg);
@@ -74,7 +69,7 @@ body{
 .lang-toggle .chip:hover{opacity:1; transform:translateY(-1px)}
 .lang-toggle .chip.active{opacity:1; outline:2px solid color-mix(in oklab, var(--accent) 65%, transparent)}
 
-/* Tabs (icône au-dessus du label) */
+/* Tabs */
 .tabs{display:flex;gap:10px;margin:8px 0 14px}
 .tabs .tab{
   display:flex; flex-direction: column; align-items:center; justify-content:center;
@@ -95,80 +90,15 @@ body{
 
 /* Topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px}
-
-/* ===== File d’intensités colorée ===== */
-
-/* conteneur scrollable et clean */
-.badges{
-  display:flex; gap:8px; flex-wrap:nowrap;
-  overflow-x:auto; -webkit-overflow-scrolling:touch;
-  padding-bottom:2px; mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
-}
-
-/* badge “pilule” avec couche de remplissage + shimmer */
+.badges{display:flex;gap:8px;flex-wrap:wrap}
 .badge{
-  position:relative; overflow:hidden;
-  background: color-mix(in oklab, var(--card-bg) 92%, transparent);
-  border-radius:999px; padding:6px 12px;
-  border:1px solid var(--card-border);
-  line-height:1; white-space:nowrap;
-  user-select:none;
-  transition: transform .18s var(--easing), box-shadow .18s var(--easing), opacity .18s var(--easing);
+  background:color-mix(in oklab, var(--card-bg) 92%, transparent);
+  border-radius:999px; padding:6px 10px; font-size:.95rem; backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 0 1px var(--card-border);
 }
+.badge.strong{box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--accent) 60%, transparent)}
 
-/* couleurs par intensité (indépendantes de body[data-intensity]) */
-.badge[data-seg="L1"]{ --c1:#d17aa6; --c2:#f0c9a6; }
-.badge[data-seg="L2"]{ --c1:#c27b57; --c2:#e8b076; }
-.badge[data-seg="L3"]{ --c1:#cf6f4f; --c2:#eba759; }
-.badge[data-seg="L4"]{ --c1:#cf2b6b; --c2:#ff7ab2; }
-.badge[data-seg="L5"]{ --c1:#c2203f; --c2:#ff6b6b; }
-.badge[data-seg="SEXE"]{ --c1:#9e3bd6; --c2:#e3b3ff; }
-
-/* rendu par défaut (upcoming) */
-.badge.upcoming{
-  background: linear-gradient(180deg, color-mix(in oklab, var(--c1) 28%, #000 8%), color-mix(in oklab, var(--c1) 12%, #000 0%));
-  border-color: color-mix(in oklab, var(--c1) 30%, var(--card-border));
-  color:#fff; opacity:.95;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 6px 20px color-mix(in oklab, var(--c1) 14%, transparent);
-}
-.badge.upcoming:hover{ transform:translateY(-1px) }
-
-/* badge courant : outline + shimmer + remplissage progressif */
-.badge.current{
-  color:#fff;
-  border-color: color-mix(in oklab, var(--c1) 55%, var(--card-border));
-  box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--c1) 55%, transparent),
-    0 10px 26px color-mix(in oklab, var(--c1) 28%, transparent);
-  background: linear-gradient(180deg, color-mix(in oklab, var(--c1) 45%, #000 8%), color-mix(in oklab, var(--c2) 22%, #000 0%));
-  transform: translateY(-1px);
-}
-
-/* couche de remplissage gauche→droite pour le progrès (pilotée en JS via --pct) */
-.badge .fill{
-  position:absolute; inset:0 auto 0 0; width:var(--pct, 0%); pointer-events:none;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--c2) 65%, #000 0%), color-mix(in oklab, var(--c1) 55%, #000 0%));
-  opacity:.55;
-  transition: width .18s linear, opacity .18s var(--easing);
-}
-
-/* effet “shimmer” diagonal subtil */
-.badge.current::after{
-  content:""; position:absolute; inset:-150% -50%; pointer-events:none;
-  background: linear-gradient(60deg, transparent 40%, rgba(255,255,255,.25) 50%, transparent 60%);
-  animation: shimmer 3s var(--easing) infinite;
-  opacity:.35; mix-blend-mode: screen;
-}
-@keyframes shimmer { from{ transform: translateX(-20%) } to{ transform: translateX(20%) } }
-
-/* texte interne */
-.badge .txt{ position:relative; z-index:1 }
-
-/* variante “passé” si tu veux l’activer plus tard */
-.badge.past{ opacity:.38; filter:grayscale(.1) }
-
-
-/* Cartes */
+/* Card */
 .card{
   background: var(--card-bg); border:1px solid var(--card-border);
   border-radius: var(--radius-lg); padding:16px; box-shadow: var(--shadow);
@@ -177,7 +107,7 @@ body{
 }
 @keyframes soft-enter{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
 
-/* VISUELS communs (PLAY + DRAW) */
+/* Visuel */
 .action-visual{
   position:relative; width:100%; aspect-ratio:1/1;
   background:var(--visual-bg) center/cover no-repeat #111;
@@ -219,11 +149,10 @@ body{
   border-radius:999px;
 }
 
-/* ===== PLAYER (en 3 rangées) ===== */
+/* Player */
 .player{ display:flex; flex-direction:column; gap:10px }
 .player-row{ display:flex; align-items:center; gap:10px; width:100% }
 
-/* Rangée 1 : contrôles */
 .controls-row{ justify-content:center }
 .player-btn{
   display:grid; place-items:center;
@@ -246,7 +175,6 @@ body{
 .player-btn[hidden]{ display:none !important; }
 .player-btn svg{ width:24px; height:24px; display:block }
 
-/* Rangée 2 : barre + temps */
 .scrub-row{ gap:12px }
 .time-badge{
   background:rgba(255,255,255,.06); padding:4px 10px; border-radius:10px;
@@ -265,7 +193,6 @@ body{
   transition: width .16s linear;
 }
 
-/* Rangée 3 : meta action */
 .meta-chip{
   margin-left:auto; margin-right:auto;
   background: color-mix(in oklab, var(--card-bg) 92%, transparent);
@@ -273,7 +200,7 @@ body{
   border-radius:999px; padding:6px 10px; font-size:.9rem; color:#fff;
 }
 
-/* ===== Boutons génériques (pour settings/draw) ===== */
+/* Boutons génériques */
 .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}
 button{
   position:relative; border:none; border-radius:14px; padding:12px 14px; color:#fff; min-width:98px;
@@ -291,7 +218,7 @@ button:disabled{ opacity:.55; cursor:not-allowed }
 button:hover:not(:disabled){ transform: translateY(-1px) }
 button:active:not(:disabled){ transform: translateY(0) scale(.99) }
 
-/* Ripple doux (utilisé par JS via --mx/--my) */
+/* Ripple doux (via --mx/--my) */
 button::after{
   content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
   background: radial-gradient(120px 120px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.24), transparent 60%);
@@ -315,10 +242,8 @@ button:active::after{ opacity:1 }
 .switch input:checked + .slider{ background: linear-gradient(180deg, var(--accent-2), var(--accent)) }
 .switch input:checked + .slider:before{ transform:translateX(22px) }
 
-/* Colonnes settings → pile verticale */
+/* Piles / inputs */
 .stack{display:flex; flex-direction:column; gap:12px}
-
-/* Champs / inputs */
 .field{display:flex;flex-direction:column;gap:6px;margin:6px 0}
 .field.checkbox{flex-direction:row;align-items:center}
 .field input, .field select{
@@ -333,7 +258,7 @@ button:active::after{ opacity:1 }
 .input-affix input{all:unset;color:#fff;width:68px;text-align:center}
 .input-affix .affix{color:var(--muted);margin-left:8px}
 
-/* Séquence (liste éditable) */
+/* Séquence */
 .sequence-list .row{
   display:grid; grid-template-columns:auto 1fr auto auto; gap:10px; align-items:center;
   background: color-mix(in oklab, var(--card-bg) 92%, transparent);
@@ -350,7 +275,7 @@ button:active::after{ opacity:1 }
 .range-row > div{background: color-mix(in oklab, var(--card-bg) 92%, transparent); padding:8px; border-radius:12px; box-shadow: inset 0 0 0 1px var(--card-border) }
 .range-row label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
 
-/* Chips / options */
+/* Chips */
 .chip-row, .mode-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .chip{
   background:var(--chip); color:var(--chip-ink); border:none; border-radius:999px; padding:8px 12px;
@@ -363,126 +288,16 @@ button:active::after{ opacity:1 }
 }
 .intensity-chip.active{outline:2px solid color-mix(in oklab, var(--accent) 55%, transparent)}
 
-/* Respect du thème (anciennes classes) */
 .theme-level1,.theme-level2,.theme-level3,.theme-level4,.theme-level5,.theme-sexe{ outline:none }
 
-/* Icônes plafonnées pour netteté */
 .icon-32 { --icon-max: 32px; }
 .icon-64 { --icon-max: 64px; }
 .icon-96 { --icon-max: 96px; }
 
-/* Footer */
 footer{margin-top:auto;padding:12px 0;color:var(--muted);text-align:center}
 
-/* Mobile compact */
 @media (max-width:420px){
   .controls-row{ gap:8px }
   .player-btn{ width:40px; height:40px }
   .player-btn.primary{ width:48px; height:48px }
 }
-
-/* ===== Ruban centré d’intensités (carrousel) ===== */
-.seg-ribbon{
-  position:relative;
-  height:64px;                /* garde de l’air haut/bas */
-  display:grid; place-items:center;
-  overflow:hidden;
-  margin:10px 0 12px;
-  padding:6px 0;
-}
-.seg-ribbon::before,
-.seg-ribbon::after{
-  content:""; position:absolute; top:0; bottom:0; width:16px; pointer-events:none;
-  /* léger fondu aux bords */
-  background: linear-gradient(to right, rgba(0,0,0,.35), transparent);
-  z-index:2;
-}
-.seg-ribbon::before{ left:0 }
-.seg-ribbon::after{
-  right:0; transform:scaleX(-1);
-}
-
-.seg-track{
-  display:inline-flex; align-items:center; gap:10px;
-  will-change: transform;
-  transition: transform .45s var(--easing);
-}
-
-/* Badge de base (hérite de .badge) */
-.seg-track .badge{
-  position:relative; overflow:hidden;
-  border-radius:999px; padding:8px 14px;
-  line-height:1; white-space:nowrap; user-select:none;
-  border:1px solid var(--card-border);
-  background: color-mix(in oklab, var(--card-bg) 92%, transparent);
-  color:#fff;
-
-  /* état “dim” par défaut, puis on renforce la current */
-  opacity:.65; filter:saturate(.8) brightness(.95);
-  transform: scale(.92);
-  transition:
-    transform .28s var(--easing),
-    opacity .28s var(--easing),
-    filter .28s var(--easing),
-    box-shadow .28s var(--easing),
-    background .28s var(--easing);
-}
-
-/* Couleurs propres à chaque intensité (indépendantes du thème courant) */
-.seg-track .badge[data-seg="L1"]{ --c1:#d17aa6; --c2:#f0c9a6; }
-.seg-track .badge[data-seg="L2"]{ --c1:#c27b57; --c2:#e8b076; }
-.seg-track .badge[data-seg="L3"]{ --c1:#cf6f4f; --c2:#eba759; }
-.seg-track .badge[data-seg="L4"]{ --c1:#cf2b6b; --c2:#ff7ab2; }
-.seg-track .badge[data-seg="L5"]{ --c1:#c2203f; --c2:#ff6b6b; }
-.seg-track .badge[data-seg="SEXE"]{ --c1:#9e3bd6; --c2:#e3b3ff; }
-
-/* past/upcoming (dim) */
-.seg-track .badge.past,
-.seg-track .badge.upcoming{
-  background: linear-gradient(180deg,
-    color-mix(in oklab, var(--c1) 20%, #000 8%),
-    color-mix(in oklab, var(--c1) 8%, #000 0%)
-  );
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 6px 16px color-mix(in oklab, var(--c1) 12%, transparent);
-}
-
-/* current = zoom + éclat + outline + shimmer */
-.seg-track .badge.current{
-  opacity:1; filter:none; transform: scale(1.12);
-  background: linear-gradient(180deg,
-    color-mix(in oklab, var(--c1) 50%, #000 10%),
-    color-mix(in oklab, var(--c2) 28%, #000 0%)
-  );
-  box-shadow:
-    inset 0 0 0 2px color-mix(in oklab, var(--c1) 55%, transparent),
-    0 10px 24px color-mix(in oklab, var(--c1) 28%, transparent);
-}
-
-/* remplissage du progrès (piloté en JS via --pct) */
-.seg-track .badge .fill{
-  position:absolute; inset:0 auto 0 0; width:var(--pct, 0%);
-  background: linear-gradient(180deg,
-    color-mix(in oklab, var(--c2) 65%, #000 0%),
-    color-mix(in oklab, var(--c1) 55%, #000 0%)
-  );
-  opacity:.5; pointer-events:none;
-  transition: width .18s linear, opacity .18s var(--easing);
-}
-.seg-track .badge .txt{ position:relative; z-index:1 }
-
-/* shimmer subtil pour la current */
-.seg-track .badge.current::after{
-  content:""; position:absolute; inset:-150% -60%; pointer-events:none;
-  background: linear-gradient(60deg, transparent 45%, rgba(255,255,255,.28) 50%, transparent 55%);
-  animation: segShimmer 3s var(--easing) infinite;
-  opacity:.35; mix-blend-mode:screen;
-}
-@keyframes segShimmer { from{ transform: translateX(-18%) } to{ transform: translateX(18%) } }
-
-/* 3 badges max visibles sans scroll : on coupe proprement */
-@media (min-width: 0px){
-  .seg-ribbon{ --max-badges:3 }
-}
-
-
-

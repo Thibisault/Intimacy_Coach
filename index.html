@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- Polices -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -63,9 +63,8 @@
             </div>
           </div>
 
-          <!-- CARTE LECTEUR D’INTENSITÉ -->
+          <!-- CARTE LECTEUR -->
           <div id="action-card" class="card theme-level1">
-            <!-- visuel + overlay -->
             <div id="action-visual" class="action-visual" aria-label="Cadre texte sur image">
               <div class="action-overlay">
                 <div class="action-text zh" id="text-zh">—</div>
@@ -78,12 +77,10 @@
             <!-- PLAYER -->
             <div class="player">
               <div class="player-row controls-row">
-                <!-- PREVIOUS intelligent -->
-                <button id="btn-prev" class="player-btn" title="Revenir">
+                <button id="btn-prev" class="player-btn" title="Revenir à l’action précédente">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6V5zm3.5 7 8.5 6V6l-8.5 6z" fill="currentColor"/></svg>
                 </button>
 
-                <!-- PLAY / PAUSE (toggle par JS) -->
                 <button id="btn-start" class="player-btn primary" title="Lecture">
                   <img class="icon icon-32" src="./public/icons/ui/btn-start.webp" alt="">
                 </button>
@@ -91,17 +88,14 @@
                   <img class="icon icon-32" src="./public/icons/ui/btn-pause.webp" alt="">
                 </button>
 
-                <!-- NEXT (intensité) -->
-                <button id="btn-next" class="player-btn" title="Intensité suivante">
+                <button id="btn-next" class="player-btn" title="Aller à l’intensité suivante">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2V5zM6 6l8.5 6L6 18V6z" fill="currentColor"/></svg>
                 </button>
 
-                <!-- SKIP (action) -->
                 <button id="btn-skip" class="player-btn" title="Passer l’action">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l7 6-7 6V6zm9 0h1.5v12H16V6z" fill="currentColor"/></svg>
                 </button>
 
-                <!-- STOP -->
                 <button id="btn-stop" class="player-btn danger" title="Stop" disabled>
                   <img class="icon icon-32" src="./public/icons/ui/btn-stop.webp" alt="">
                 </button>
@@ -196,7 +190,6 @@
             </div>
           </div>
 
-          <!-- même visuel + overlay que PLAY -->
           <div id="draw-card" class="card theme-level1" style="margin-top:12px;display:none">
             <div id="draw-visual" class="action-visual" aria-label="Cadre texte sur image">
               <div class="action-overlay">
@@ -213,7 +206,7 @@
       </footer>
     </div>
 
-    <!-- JS -->
+    <!-- JS (modules existants) -->
     <script type="module" src="./js/i18n.js"></script>
     <script type="module" src="./js/util.js"></script>
     <script type="module" src="./js/storage.js"></script>
@@ -222,6 +215,7 @@
     <script type="module" src="./js/wake-lock.js"></script>
     <script type="module" src="./js/planner.js"></script>
     <script type="module" src="./js/app.js"></script>
+
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
