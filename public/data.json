@@ -77,21 +77,21 @@
           "actor": "P1",
           "target": "P2",
           "templates": [
-            { "text": "{P1} embrasse la poitrine de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的胸部。" },
-            { "text": "{P1} suce doucement les mamelons de {P2}.", "text_zh": "{P1} 轻轻含吮 {P2} 的乳头。" },
-            { "text": "{P1} mordille légèrement les mamelons de {P2}.", "text_zh": "{P1} 轻轻咬啮 {P2} 的乳头。" },
-            { "text": "{P1} caresse les seins de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的乳房。" },
-            { "text": "{P1} embrasse le bas-ventre de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的下腹。" },
-            { "text": "{P1} caresse les fesses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的臀部。" },
-            { "text": "{P1} embrasse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的大腿内侧。" },
-            { "text": "{P1} caresse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的大腿内侧。" },
-            { "text": "{P1} embrasse la clavicule de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的锁骨。" },
-            { "text": "{P1} glisse sa main sur le bas du dos de {P2}.", "text_zh": "{P1} 将手滑过 {P2} 的下背。" },
+            {"image": "LV2-1.0", "text": "{P1} embrasse la poitrine de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的胸部。" },
+            {"image": "LV2-2.0", "text": "{P1} suce doucement les mamelons de {P2}.", "text_zh": "{P1} 轻轻含吮 {P2} 的乳头。" },
+            {"image": "LV2-3.0", "text": "{P1} mordille légèrement les mamelons de {P2}.", "text_zh": "{P1} 轻轻咬啮 {P2} 的乳头。" },
+            {"image": "LV2-4.0", "text": "{P1} caresse les seins de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的乳房。" },
+            {"image": "LV2-5.0", "text": "{P1} embrasse le bas-ventre de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的下腹。" },
+            {"image": "LV2-6.0", "text": "{P1} caresse les fesses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的臀部。" },
+            {"image": "LV2-7.0", "text": "{P1} embrasse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的大腿内侧。" },
+            {"image": "LV2-8.0", "text": "{P1} caresse l’intérieur des cuisses de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的大腿内侧。" },
+            {"image": "LV2-9.0", "text": "{P1} embrasse la clavicule de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的锁骨。" },
+            {"image": "LV2-10.0", "text": "{P1} glisse sa main sur le bas du dos de {P2}.", "text_zh": "{P1} 将手滑过 {P2} 的下背。" },
 
-            { "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte, lentement.", "text_zh": "{P1} 隔着内裤缓慢抚摸 {P2} 的外阴。", "tags": ["clothed"] },
-            { "text": "{P1} frotte l’intérieur des cuisses de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料摩擦 {P2} 的大腿内侧。", "tags": ["clothed"] },
-            { "text": "{P1} effleure le contour de la vulve de {P2} à travers ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 外阴的轮廓。", "tags": ["clothed"] },
-            { "text": "{P1} presse légèrement sa paume entre les cuisses de {P2} par-dessus sa culotte.", "text_zh": "{P1} 隔着内裤把手掌轻轻按在 {P2} 的双腿之间。", "tags": ["clothed"] }
+            {"image": "LV2-11.0", "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte, lentement.", "text_zh": "{P1} 隔着内裤缓慢抚摸 {P2} 的外阴。", "tags": ["clothed"] },
+            {"image": "LV2-12.0", "text": "{P1} frotte l’intérieur des cuisses de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料摩擦 {P2} 的大腿内侧。", "tags": ["clothed"] },
+            {"image": "LV2-13.0", "text": "{P1} effleure le contour de la vulve de {P2} à travers ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 外阴的轮廓。", "tags": ["clothed"] },
+            {"image": "LV2-14.0", "text": "{P1} presse légèrement sa paume entre les cuisses de {P2} par-dessus sa culotte.", "text_zh": "{P1} 隔着内裤把手掌轻轻按在 {P2} 的双腿之间。", "tags": ["clothed"] }
           ]
         },
         {
@@ -146,20 +146,20 @@
           "actor": "P1",
           "target": "P2",
           "templates": [
-            { "text": "{P1} embrasse la vulve de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的外阴。" },
-            { "text": "{P1} embrasse l’entrée du vagin de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的阴道入口。" },
+            {"image": "LV3-1.0", "text": "{P1} embrasse la vulve de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的外阴。" },
+            {"image": "LV3-2.0", "text": "{P1} embrasse l’entrée du vagin de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的阴道入口。" },
 
-            { "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte avant de glisser plus bas.", "text_zh": "{P1} 先隔着内裤抚摸 {P2} 的外阴，然后再向下探索。", "tags": ["clothed"] },
-            { "text": "{P1} frotte doucement le clitoris de {P2} à travers le tissu de sa culotte.", "text_zh": "{P1} 隔着内裤轻轻摩擦 {P2} 的阴蒂。", "tags": ["clothed"] },
+            {"image": "LV3-3.0", "text": "{P1} caresse la vulve de {P2} par-dessus sa culotte avant de glisser plus bas.", "text_zh": "{P1} 先隔着内裤抚摸 {P2} 的外阴，然后再向下探索。", "tags": ["clothed"] },
+            {"image": "LV3-4.0", "text": "{P1} frotte doucement le clitoris de {P2} à travers le tissu de sa culotte.", "text_zh": "{P1} 隔着内裤轻轻摩擦 {P2} 的阴蒂。", "tags": ["clothed"] },
 
-            { "text": "{P1} caresse la vulve de {P2} avec ses doigts.", "text_zh": "{P1} 用手指抚摸 {P2} 的外阴。" },
-            { "text": "{P1} frotte doucement le clitoris de {P2} avec un doigt.", "text_zh": "{P1} 用一根手指轻轻摩擦 {P2} 的阴蒂。" },
-            { "text": "{P1} écarte doucement les lèvres de {P2} avec ses doigts.", "text_zh": "{P1} 用手指轻轻分开 {P2} 的阴唇。" },
-            { "text": "{P1} glisse sa paume sur la vulve de {P2}.", "text_zh": "{P1} 用手掌在 {P2} 的外阴上缓缓滑过。" },
-            { "text": "{P1} tapote le clitoris de {P2} avec le bout du doigt.", "text_zh": "{P1} 用指尖轻点 {P2} 的阴蒂。" },
-            { "text": "{P1} embrasse l’intérieur des cuisses près de la vulve de {P2}.", "text_zh": "{P1} 在靠近外阴的大腿内侧亲吻 {P2}。" },
-            { "text": "{P1} frotte son gland sur le clitoris de {P2} sans pénétrer.", "text_zh": "{P1} 用龟头在 {P2} 的阴蒂上摩擦，不进入。" },
-            { "text": "{P1} frotte son pénis entre les lèvres de {P2} sans entrer.", "text_zh": "{P1} 将阴茎在 {P2} 的阴唇间摩擦，不进入。" }
+            {"image": "LV3-5.0", "text": "{P1} caresse la vulve de {P2} avec ses doigts.", "text_zh": "{P1} 用手指抚摸 {P2} 的外阴。" },
+            {"image": "LV3-6.0", "text": "{P1} frotte doucement le clitoris de {P2} avec un doigt.", "text_zh": "{P1} 用一根手指轻轻摩擦 {P2} 的阴蒂。" },
+            {"image": "LV3-7.0", "text": "{P1} écarte doucement les lèvres de {P2} avec ses doigts.", "text_zh": "{P1} 用手指轻轻分开 {P2} 的阴唇。" },
+            {"image": "LV3-8.0", "text": "{P1} glisse sa paume sur la vulve de {P2}.", "text_zh": "{P1} 用手掌在 {P2} 的外阴上缓缓滑过。" },
+            {"image": "LV3-9.0", "text": "{P1} tapote le clitoris de {P2} avec le bout du doigt.", "text_zh": "{P1} 用指尖轻点 {P2} 的阴蒂。" },
+            {"image": "LV3-10.0", "text": "{P1} embrasse l’intérieur des cuisses près de la vulve de {P2}.", "text_zh": "{P1} 在靠近外阴的大腿内侧亲吻 {P2}。" },
+            {"image": "LV3-11.0", "text": "{P1} frotte son gland sur le clitoris de {P2} sans pénétrer.", "text_zh": "{P1} 用龟头在 {P2} 的阴蒂上摩擦，不进入。" },
+            {"image": "LV3-12.0", "text": "{P1} frotte son pénis entre les lèvres de {P2} sans entrer.", "text_zh": "{P1} 将阴茎在 {P2} 的阴唇间摩擦，不进入。" }
           ]
         },
         {
