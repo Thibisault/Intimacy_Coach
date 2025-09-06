@@ -8,21 +8,21 @@
           "actor": "P1",
           "target": "P2",
           "templates": [
-            { "text": "{P1} embrasse doucement les lèvres de {P2}.", "text_zh": "{P1} 轻轻亲吻 {P2} 的嘴唇。" },
-            { "text": "{P1} dépose un baiser sur la joue de {P2}.", "text_zh": "{P1} 在 {P2} 的脸颊上落下一个吻。" },
-            { "text": "{P1} embrasse le front de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的额头。" },
-            { "text": "{P1} embrasse le cou de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的脖颈。" },
-            { "text": "{P1} embrasse la nuque de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的后颈。" },
-            { "text": "{P1} embrasse l’oreille de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的耳朵。" },
-            { "text": "{P1} caresse la nuque de {P2} du bout des doigts.", "text_zh": "{P1} 用指尖抚摸 {P2} 的后颈。" },
-            { "text": "{P1} effleure le dos de {P2} avec sa main.", "text_zh": "{P1} 用手掌轻轻掠过 {P2} 的背部。" },
-            { "text": "{P1} caresse les hanches de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的髋部。" },
-            { "text": "{P1} caresse les cheveux de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的头发。" },
+            {"image": "1.0", "text": "{P1} embrasse doucement les lèvres de {P2}.", "text_zh": "{P1} 轻轻亲吻 {P2} 的嘴唇。" },
+            {"image": "2.0", "text": "{P1} dépose un baiser sur la joue de {P2}.", "text_zh": "{P1} 在 {P2} 的脸颊上落下一个吻。" },
+            {"image": "3.0", "text": "{P1} embrasse le front de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的额头。" },
+            {"image": "4.0", "text": "{P1} embrasse le cou de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的脖颈。" },
+            {"image": "5.0", "text": "{P1} embrasse la nuque de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的后颈。" },
+            {"image": "6.0", "text": "{P1} embrasse l’oreille de {P2}.", "text_zh": "{P1} 亲吻 {P2} 的耳朵。" },
+            {"image": "7.0", "text": "{P1} caresse la nuque de {P2} du bout des doigts.", "text_zh": "{P1} 用指尖抚摸 {P2} 的后颈。" },
+            {"image": "8.0", "text": "{P1} effleure le dos de {P2} avec sa main.", "text_zh": "{P1} 用手掌轻轻掠过 {P2} 的背部。" },
+            {"image": "9.0", "text": "{P1} caresse les hanches de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的髋部。" },
+            {"image": "10.0", "text": "{P1} caresse les cheveux de {P2}.", "text_zh": "{P1} 抚摸 {P2} 的头发。" },
 
-            { "text": "{P1} caresse l’extérieur des cuisses de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻抚 {P2} 的大腿外侧。", "tags": ["clothed"] },
-            { "text": "{P1} glisse sa main sur les hanches de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料把手滑过 {P2} 的髋部。", "tags": ["clothed"] },
-            { "text": "{P1} caresse le bas du dos de {P2} à travers son haut.", "text_zh": "{P1} 隔着上衣抚摸 {P2} 的下背。", "tags": ["clothed"] },
-            { "text": "{P1} effleure la taille de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 的腰际。", "tags": ["clothed"] }
+            {"image": "11.0", "text": "{P1} caresse l’extérieur des cuisses de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻抚 {P2} 的大腿外侧。", "tags": ["clothed"] },
+            {"image": "12.0", "text": "{P1} glisse sa main sur les hanches de {P2} au-dessus du tissu.", "text_zh": "{P1} 隔着布料把手滑过 {P2} 的髋部。", "tags": ["clothed"] },
+            {"image": "13.0", "text": "{P1} caresse le bas du dos de {P2} à travers son haut.", "text_zh": "{P1} 隔着上衣抚摸 {P2} 的下背。", "tags": ["clothed"] },
+            {"image": "14.0", "text": "{P1} effleure la taille de {P2} par-dessus ses vêtements.", "text_zh": "{P1} 隔着衣物轻触 {P2} 的腰际。", "tags": ["clothed"] }
           ]
         },
         {
